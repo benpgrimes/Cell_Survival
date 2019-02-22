@@ -4,6 +4,7 @@
 # abstract Cell; parent to Organism and Food
 # CellSurvivalDriver
 # Board
+# CellSurvivalPanel
 #
 # *Guidelines while writing:
 # 1. Include javadocs with your functions and classes. In function comments are not necessary, but make sure the javadocs are descriptive.

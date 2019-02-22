@@ -2,7 +2,7 @@
 #
 # *Classes
 # abstract Cell; parent to Organism and Food
-# Driver
+# CellSurvivalDriver
 # Board
 #
 # *Guidelines while writing:

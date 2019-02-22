@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
-import java.util.*;
+import java.util.LinkedList;
 
 public class CellSurvivalPanel extends JPanel
 {

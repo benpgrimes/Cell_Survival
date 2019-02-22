@@ -9,4 +9,6 @@ public abstract class Cell {
   protected double x, y, diam;
   protected int energy;
   protected Color color;
+  
+  public abstract void draw(Graphics myBuffer);
 }

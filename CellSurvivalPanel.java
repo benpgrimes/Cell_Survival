@@ -81,7 +81,7 @@ public class CellSurvivalPanel extends JPanel
              break;
            }
            
-                     
+           //THIS IS CREATING THE TAB LABLES        
            buffer.setColor(Color.BLACK); 
            buffer.setFont(new Font("Monospaced", Font.BOLD, 24));
            buffer.drawString("Board:  ",10,25);

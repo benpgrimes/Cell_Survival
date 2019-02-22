@@ -1,4 +1,4 @@
-
+import java.awt.*;
 public class Food extends Cell{
   
   public Food (double x, double y, double diam, int energy){

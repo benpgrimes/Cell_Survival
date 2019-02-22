@@ -32,6 +32,8 @@ public class Organism extends Cell {
   //[7]; new temperment
   private int preservation[] = new int[8];
   
+  private int choice;
+  
   
   public Organism(double x, double y, double diam, int energy, Color color, int[] tendancies){
     this.x = x;
@@ -50,4 +52,33 @@ public class Organism extends Cell {
       this.preservation[i] = tendancies[7+i];
     }
   }
+  /*
+  * Puts all the tendancies into a single array
+  */
+  public int[] getTendancies(){
+    int[] tendancies = new int[15];
+    tendancies[0] = this.growthLimit;
+    tendancies[1] = this.growthInclination;
+    tendancies[2] = this.curiosity;
+    tendancies[3] = this.maternalMin;
+    tendancies[4] = this.maternalInclination;
+    tendancies[5] = this.active;
+    tendancies[6] = this.temperment;
+    for(int i = 0; i < 8; i++){
+      tendancies[7+i] = this.preservation[i];
+    }
+    return tendancies;
+  }
+  
+  public int choose(){
+    boolean = false;
+    if(this.choice = null){
+      
+    }  
+  } 
+  /*
+  public void die(){
+    Food food = new Food(this.x, this.y, this.diam, int(this.diam));
+    
+  }  */
 }

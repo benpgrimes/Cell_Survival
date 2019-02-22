@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
+import java.util.*;
 
 public class CellSurvivalPanel extends JPanel
 {
@@ -11,6 +12,9 @@ public class CellSurvivalPanel extends JPanel
   private Timer t;
   private static final int N = 1500;
   private static int screen = 0;
+  private LinkedList<Organism> organism;
+  private LinkedList<Food> food;
+  
   public CellSurvivalPanel()
       {
         //declare variables
@@ -18,12 +22,14 @@ public class CellSurvivalPanel extends JPanel
          buffer = myImage.getGraphics();    
          t = new Timer(10, new Listener());
          t.start();
+         organism = new LinkedList<Organism>();
+         food = new LinkedList<Food>();
          addMouseListener(new Mouse());
          
          //************************************************
          // THIS IS THE MAIN SECTION THE MATH WILL BE DONE
          //************************************************
-         
+                
          switch(screen)
          {
           case 0: //board

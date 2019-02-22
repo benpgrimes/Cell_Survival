@@ -8,5 +8,15 @@ public class Food extends Cell{
     this.color = Color.RED;
     this.energy = energy;
   }
-  
+  //****************************************************************
+  //  draw(Graphics)
+  //  @param graphic- the buffer we are using to draw the objects
+  //  @return void
+  //  draws the food object to the buffer
+  //****************************************************************
+  public void draw(Graphics myBuffer) 
+  {
+    myBuffer.setColor(color);
+    myBuffer.fillRect((int)(x), (int)(y), (int)myDiameter, (int)myDiameter);
+  }  
 }

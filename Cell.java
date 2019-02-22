@@ -1,4 +1,4 @@
 
-public class Cell {
+public abstract class Cell {
 
 }

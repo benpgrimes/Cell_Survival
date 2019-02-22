@@ -27,7 +27,7 @@ public class Organism extends Cell {
   //[5]; new maternal inclination
   //[6]; new active level
   //[7]; new temperment
-  private int[8] preservation;
+  private int preservation[] = new int[8];
   
   //likelihood of moving towards food
   private int temperment;

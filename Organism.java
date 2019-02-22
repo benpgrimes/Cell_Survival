@@ -32,6 +32,7 @@ public class Organism extends Cell {
   //[7]; new temperment
   private int preservation[] = new int[8];
   
+  //stores the next choice the cell will execute
   private int choice;
   
   
@@ -71,10 +72,14 @@ public class Organism extends Cell {
   }
   
   public int choose(){
-    boolean = false;
-    if(this.choice = null){
+    boolean first = this.choice == null;
+    int result = null;
+    do{
+      // TO DO
+      result = this.choice;
       
-    }  
+      first == false;
+    }while(first == false);
   } 
   /*
   public void die(){

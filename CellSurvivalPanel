@@ -5,6 +5,7 @@ import java.awt.image.*;
 
 public class CellSurvivalPanel extends JPanel
 {
+  //Intinatiating variables
   private BufferedImage myImage;
   private Graphics buffer;
   private Timer t;
@@ -12,13 +13,32 @@ public class CellSurvivalPanel extends JPanel
   private static int screen = 0;
   public CellSurvivalPanel()
       {
+        //declare variables
          myImage = new BufferedImage(N, N, BufferedImage.TYPE_INT_RGB);
          buffer = myImage.getGraphics();    
          t = new Timer(10, new Listener());
          t.start();
          addMouseListener(new Mouse());
+         
+         //************************************************
+         // THIS IS THE MAIN SECTION THE MATH WILL BE DONE
+         //************************************************
+         
+         switch(screen)
+         {
+          case 0: //board
+            break;
+          case 1: //graph
+            break;
+           case 2: //about
+            break;
+         }
+         
       }
-   
+      //**************************************************
+      // The mouse adapter is what recognizes where the 
+      // mouse is being clicked
+      //**************************************************
       private class Mouse extends MouseAdapter
       {
         public void mousePressed( MouseEvent e )
@@ -36,6 +56,11 @@ public class CellSurvivalPanel extends JPanel
           
         }
       }
+      //**************************************************
+      //  the action listener is the section where things
+      //  get drawn to the screen.  i.e. every thime the
+      //  screen refreshes this code runs
+      //**************************************************
        private class Listener implements ActionListener
        {
          public void actionPerformed(ActionEvent e)

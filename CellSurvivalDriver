@@ -11,5 +11,5 @@ public class CellSurvivalDriver
     frame.setContentPane(new CellSurvivalPanel());
     frame.setVisible(true);
       
-     }
-   }
+  }
+}

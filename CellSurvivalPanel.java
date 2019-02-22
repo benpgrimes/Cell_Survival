@@ -12,8 +12,8 @@ public class CellSurvivalPanel extends JPanel
   private Timer t;
   private static final int N = 1500;
   private static int screen = 0;
-  private LinkedList<Organism> organism;
-  private LinkedList<Food> food;
+  private LinkedList<Organism> organismList;
+  private LinkedList<Food> foodList;
   
   public CellSurvivalPanel()
       {
@@ -22,14 +22,16 @@ public class CellSurvivalPanel extends JPanel
          buffer = myImage.getGraphics();    
          t = new Timer(10, new Listener());
          t.start();
-         organism = new LinkedList<Organism>();
-         food = new LinkedList<Food>();
+         organismList = new LinkedList<Organism>();
+         foodList = new LinkedList<Food>();
          addMouseListener(new Mouse());
          
          //************************************************
          // THIS IS THE MAIN SECTION THE MATH WILL BE DONE
          //************************************************
-                
+         Food food = new Food(100.0,100.0,20,20);
+         foodList.addFirst(food);
+         
          switch(screen)
          {
           case 0: //board
@@ -76,6 +78,7 @@ public class CellSurvivalPanel extends JPanel
            case 0://board
              buffer.setColor(Color.WHITE);
              buffer.fillRect(0,0,N,N);
+             foodList.element().draw(buffer);
              break;
            case 1://graph
              buffer.setColor(Color.BLUE);

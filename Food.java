@@ -8,4 +8,5 @@ public class Food extends Cell{
     this.color = Color.RED;
     this.energy = energy;
   }
+  
 }

@@ -71,6 +71,9 @@ public class Organism extends Cell {
     return tendancies;
   }
   
+  /*
+  * returns the choice made as well as makes its next choice.
+  */
   public int choose(){
     boolean first = this.choice == null;
     int result = null;

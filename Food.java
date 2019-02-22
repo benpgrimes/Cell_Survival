@@ -17,6 +17,6 @@ public class Food extends Cell{
   public void draw(Graphics myBuffer) 
   {
     myBuffer.setColor(color);
-    myBuffer.fillRect((int)(x), (int)(y), (int)myDiameter, (int)myDiameter);
+    myBuffer.fillRect((int)x, (int)y, (int)diam, (int)diam);
   }  
 }

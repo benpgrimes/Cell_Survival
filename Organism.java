@@ -1,4 +1,11 @@
+import java.util.*;
 
+/******************************************
+* Class for the moving organisms
+*
+*
+*
+******************************************/
 public class Organism extends Cell {
   //the point at which the cells likelihood of choosing growth begins to drop off
   private int growthLimit;
@@ -84,6 +91,7 @@ public class Organism extends Cell {
       first == false;
     }while(first == false);
   } 
+  
   /*
   public void die(){
     Food food = new Food(this.x, this.y, this.diam, int(this.diam));

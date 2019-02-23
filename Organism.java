@@ -40,7 +40,7 @@ public class Organism extends Cell {
   private int preservation[] = new int[8];
   
   //stores the next choice the cell will execute
-  private int choice;
+  private int choice = -1;
   
   
   public Organism(double x, double y, double diam, int energy, Color color, int[] tendancies){
@@ -82,8 +82,8 @@ public class Organism extends Cell {
   * returns the choice made as well as makes its next choice.
   */
   public int choose(){
-    boolean first = this.choice == null;
-    int result = null;
+    boolean first = this.choice == -1;
+    int result = -1;
     do{
       // TO DO
       result = this.choice;

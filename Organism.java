@@ -119,4 +119,77 @@ public class Organism extends Cell {
     Food food = new Food(this.x, this.y, this.diam, int(this.diam));
     
   }  */
+  
+  public int getGrowthLimit() {
+	  return growthLimit;
+  }
+
+  public void setGrowthLimit(int growthLimit) {
+	  this.growthLimit = growthLimit;
+  }
+
+  public int getGrowthInclination() {
+	  return growthInclination;
+  }
+
+  public void setGrowthInclination(int growthInclination) {
+	  this.growthInclination = growthInclination;
+  }
+
+  public int getCuriosity() {
+	  return curiosity;
+  }
+
+  public void setCuriosity(int curiosity) {
+  	this.curiosity = curiosity;
+  }
+
+  public int getMaternalMin() {
+	  return maternalMin;
+  }
+
+  public void setMaternalMin(int maternalMin) {
+	  this.maternalMin = maternalMin;
+  }
+
+  public int getMaternalInclination() {
+	  return maternalInclination;
+  }
+
+  public void setMaternalInclination(int maternalInclination) {
+	  this.maternalInclination = maternalInclination;
+  }
+
+  public int getActive() {
+	  return active;
+  }
+
+  public void setActive(int active) {
+	  this.active = active;
+  }
+
+  public int getTemperament() {
+	  return temperament;
+  }
+  
+  public void setTemperament(int temperament) {
+  	this.temperament = temperament;
+  }
+  
+  public int[] getPreservation() {
+	  return preservation;
+  }
+  
+  public void setPreservation(int[] preservation) {
+	  this.preservation = preservation;
+  }
+
+  public int getChoice() {
+  	return choice;
+  }
+
+  public void setChoice(int choice) {
+  	this.choice = choice;
+  } 
+  
 }

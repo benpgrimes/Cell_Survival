@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.util.*;
 
 /******************************************
@@ -16,7 +17,7 @@ public class Organism extends Cell {
   //How often it uses examine
   private int curiosity;
   
-  //minimum for spltting
+  //minimum for splitting
   private int maternalMin;
     
   //likelihood of splitting
@@ -26,7 +27,7 @@ public class Organism extends Cell {
   private int active;
   
   //likelihood of moving towards food
-  private int temperment;
+  private int temperament;
   
   //How these values change when the organism is at critical energy levels
   //[0]; energy level required to activate
@@ -36,60 +37,81 @@ public class Organism extends Cell {
   //[4]; new maternal min
   //[5]; new maternal inclination
   //[6]; new active level
-  //[7]; new temperment
+  //[7]; new temperament
   private int preservation[] = new int[8];
   
   //stores the next choice the cell will execute
   private int choice = -1;
   
-  
-  public Organism(double x, double y, double diam, int energy, Color color, int[] tendancies){
+  /*************************
+   * Constructor for Organism
+   * @param x: The starting x value on the coordinate plane
+   * @param y: The starting y value on the coordinate plane
+   * @param diam: starting size
+   * @param energy: starting energy
+   * @param color: color of organism
+   * @param tendencies: tendencies of organism
+   */
+  public Organism(double x, double y, double diam, int energy, Color color, int[] tendencies){
     this.x = x;
     this.y = y;
     this.diam = diam;
     this.color = color;
     this.energy = energy;
-    this.growthLimit = tendancies[0];
-    this.growthInclination = tendancies[1];
-    this.curiosity = tendancies[2];
-    this.maternalMin = tendancies[3];
-    this.maternalInclination = tendancies[4];
-    this.active = tendancies[5];
-    this.temperment = tendancies[6];
+    this.growthLimit = tendencies[0];
+    this.growthInclination = tendencies[1];
+    this.curiosity = tendencies[2];
+    this.maternalMin = tendencies[3];
+    this.maternalInclination = tendencies[4];
+    this.active = tendencies[5];
+    this.temperament = tendencies[6];
     for(int i = 0; i < 8; i++){
-      this.preservation[i] = tendancies[7+i];
+      this.preservation[i] = tendencies[7+i];
     }
   }
-  /*
-  * Puts all the tendancies into a single array
-  */
-  public int[] getTendancies(){
-    int[] tendancies = new int[15];
-    tendancies[0] = this.growthLimit;
-    tendancies[1] = this.growthInclination;
-    tendancies[2] = this.curiosity;
-    tendancies[3] = this.maternalMin;
-    tendancies[4] = this.maternalInclination;
-    tendancies[5] = this.active;
-    tendancies[6] = this.temperment;
+  /********************************************
+  * Description: Puts all the tendencies into a single array
+  * @param None
+  * @return integer array of all tendencies (15 values) in the order shown:
+  * [0]; energy level required to activate
+  * [1]; new growth limit
+  * [2]; new growth inclination
+  * [3]; new curiosity
+  * [4]; new maternal minimum
+  * [5]; new maternal inclination
+  * [6]; new active level
+  * [7]; new temperament
+  * [8-14] preservation in same order
+  *******************************************/
+  public int[] getTendencies(){
+    int[] tendencies = new int[15];
+    tendencies[0] = this.growthLimit;
+    tendencies[1] = this.growthInclination;
+    tendencies[2] = this.curiosity;
+    tendencies[3] = this.maternalMin;
+    tendencies[4] = this.maternalInclination;
+    tendencies[5] = this.active;
+    tendencies[6] = this.temperament;
     for(int i = 0; i < 8; i++){
-      tendancies[7+i] = this.preservation[i];
+      tendencies[7+i] = this.preservation[i];
     }
-    return tendancies;
+    return tendencies;
   }
   
-  /*
+  /*******************************************
   * returns the choice made as well as makes its next choice.
-  */
+  * @param None
+  * 
+  ***********************************************/
   public int choose(){
-    boolean first = this.choice == -1;
+    boolean first;
     int result = -1;
     do{
-      // TO DO
+      first = this.choice == -1;
       result = this.choice;
-      
-      first == false;
-    }while(first == false);
+      //TO DO
+    }while(first);
+    return result;
   } 
   
   /*

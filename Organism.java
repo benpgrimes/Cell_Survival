@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.util.*;
+import java.lang.Math;
 
 /******************************************
 * Class for the moving organisms
@@ -9,21 +10,27 @@ import java.util.*;
 ******************************************/
 public class Organism extends Cell {
   //the point at which the cells likelihood of choosing growth begins to drop off
+  //x
   private int growthLimit;
   
   //how likely it is to use size
+  //tan^-1(x)/x based on size
   private int growthInclination;
   
   //How often it uses examine
+  //x^2 based on last use
   private int curiosity;
   
   //minimum for splitting
+  //x
   private int maternalMin;
     
   //likelihood of splitting
+  //tan^-1(x-y) + 1.5 based on energy
   private int maternalInclination;
   
   //likelihood of movement vs idle
+  //complicated
   private int active;
   
   //likelihood of moving towards food

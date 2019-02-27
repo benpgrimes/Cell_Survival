@@ -49,7 +49,7 @@ public class Organism extends Cell {
   
   //stores the next choice the cell will execute
   private int choice = -1;
-  
+	
   /*************************
    * Constructor for Organism
    * @param x: The starting x value on the coordinate plane
@@ -108,7 +108,13 @@ public class Organism extends Cell {
   /*******************************************
   * returns the choice made as well as makes its next choice.
   * @param None
-  * 
+  * @return returns an integer based on the choice. Follows this pattern:
+  * 1: Grow
+  * 2: examine
+  * 3: split
+  * 4: move
+  * 5: idle
+  * -1: choice failure
   ***********************************************/
   public int choose(){
     boolean first;
@@ -121,6 +127,16 @@ public class Organism extends Cell {
     return result;
   } 
   
+	
+	/********************************************
+	* returns the direction that the cell wishes to move
+	*
+	*
+	*********************************************/
+  public int chooseDirection(){
+		
+	  
+  }
   /*
   public void die(){
     Food food = new Food(this.x, this.y, this.diam, int(this.diam));

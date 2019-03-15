@@ -18,5 +18,30 @@ public class Food extends Cell{
   {
     myBuffer.setColor(color);
     myBuffer.fillRect((int)x, (int)y, (int)diam, (int)diam);
-  }  
+  } 
+  public double getX()
+  {
+    return x;
+  }
+  
+  public void setX(double x)
+  {
+    this.x = x;
+  }
+  
+  public double getY()
+  {
+    return y;
+  }
+  
+  public void setY(double y)
+  {
+    this.y = y;
+  }
+  
+  public int getEnergy()
+  {
+    return energy;
+  }
+  
 }

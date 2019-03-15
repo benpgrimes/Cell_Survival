@@ -1,4 +1,4 @@
-import java.awt.Color;
+import java.awt.*;
 import java.util.*;
 import java.lang.Math;
 
@@ -36,6 +36,10 @@ public class Organism extends Cell {
   //likelihood of moving towards food
   private int temperament;
   
+  //the x and y coordinates of the closest food (set after examine)
+  private double closestFoodX;
+  private double closestFoodY;
+  
   //How these values change when the organism is at critical energy levels
   //[0]; energy level required to activate
   //[1]; new growth limit
@@ -49,7 +53,7 @@ public class Organism extends Cell {
   
   //stores the next choice the cell will execute
   private int choice = -1;
-	
+ 
   /*************************
    * Constructor for Organism
    * @param x: The starting x value on the coordinate plane
@@ -74,6 +78,10 @@ public class Organism extends Cell {
     this.temperament = tendencies[6];
     for(int i = 0; i < 8; i++){
       this.preservation[i] = tendencies[7+i];
+                                          
+    closestFoodX = 0;
+    closestFoodY = 0;
+    
     }
   }
   /********************************************
@@ -127,92 +135,166 @@ public class Organism extends Cell {
     return result;
   } 
   
-	
-	/********************************************
-	* returns the direction that the cell wishes to move
-	*
-	*
-	*********************************************/
+ 
+ /********************************************
+ * returns the direction that the cell wishes to move
+ *
+ *
+ *********************************************/
   public int chooseDirection(){
-		
-	  
+  
+   return 0;
   }
-  /*
+  /*  THIS SHOULD BE DONE IN THE PANNEL
   public void die(){
     Food food = new Food(this.x, this.y, this.diam, int(this.diam));
     
   }  */
   
+ /********************************************
+ * draws the organism on the pannel
+ *
+ *
+ *********************************************/
+  
+  public void draw(Graphics myBuffer) 
+  {
+    myBuffer.setColor(color);
+    myBuffer.fillOval((int)x, (int)y, (int)diam, (int)diam);
+  }  
+  
+ /********************************************
+ * updates the closest food coordinates
+ *
+ *
+ *********************************************/
+  public void examine(double x, double y)
+  {
+    closestFoodX = x;
+    closestFoodY = y;
+  }
+  
+ /********************************************
+ * moves towards the closest food
+ *
+ *
+ *********************************************/
+  public void move()
+  {
+    if(energy >0)
+    {
+      //Checks X
+      if(closestFoodX > (x + 5))
+      {
+        x += 5;
+        energy -= 1;
+      }
+      else if(closestFoodX < (x - 5))
+      {
+        x -= 5;
+        energy -= 1;
+      }
+    }
+    if(energy > 0)
+    {
+      //Checks y
+      if(closestFoodY > (y + 5))
+      {
+        y += 5;
+        energy -= 1;
+      }
+      else if(closestFoodY < (y - 5))
+      {
+        y -= 5;
+        energy -= 1;
+      }
+    }
+  }
+  
+ /********************************************
+ * checks to see if the organism collects the food
+ *
+ *
+ *********************************************/
+  public boolean collision(double foodX, double foodY,int foodEnergy)
+  {
+    if(Math.abs(foodX - x) <= diam && Math.abs(foodY - y) <= diam)
+    {
+      energy += foodEnergy;
+      return true;
+    }
+    return false;
+  }
+  
   public int getGrowthLimit() {
-	  return growthLimit;
+   return growthLimit;
   }
 
   public void setGrowthLimit(int growthLimit) {
-	  this.growthLimit = growthLimit;
+   this.growthLimit = growthLimit;
   }
 
   public int getGrowthInclination() {
-	  return growthInclination;
+   return growthInclination;
   }
 
   public void setGrowthInclination(int growthInclination) {
-	  this.growthInclination = growthInclination;
+   this.growthInclination = growthInclination;
   }
 
   public int getCuriosity() {
-	  return curiosity;
+   return curiosity;
   }
 
   public void setCuriosity(int curiosity) {
-  	this.curiosity = curiosity;
+   this.curiosity = curiosity;
   }
 
   public int getMaternalMin() {
-	  return maternalMin;
+   return maternalMin;
   }
 
   public void setMaternalMin(int maternalMin) {
-	  this.maternalMin = maternalMin;
+   this.maternalMin = maternalMin;
   }
 
   public int getMaternalInclination() {
-	  return maternalInclination;
+   return maternalInclination;
   }
 
   public void setMaternalInclination(int maternalInclination) {
-	  this.maternalInclination = maternalInclination;
+   this.maternalInclination = maternalInclination;
   }
 
   public int getActive() {
-	  return active;
+   return active;
   }
 
   public void setActive(int active) {
-	  this.active = active;
+   this.active = active;
   }
 
   public int getTemperament() {
-	  return temperament;
+   return temperament;
   }
   
   public void setTemperament(int temperament) {
-  	this.temperament = temperament;
+   this.temperament = temperament;
   }
   
   public int[] getPreservation() {
-	  return preservation;
+   return preservation;
   }
   
   public void setPreservation(int[] preservation) {
-	  this.preservation = preservation;
+   this.preservation = preservation;
   }
 
   public int getChoice() {
-  	return choice;
+   return choice;
   }
 
   public void setChoice(int choice) {
-  	this.choice = choice;
+   this.choice = choice;
   } 
-  
 }

@@ -27,20 +27,26 @@ public class CellSurvivalPanel extends JPanel
          addMouseListener(new Mouse());
          
          //************************************************
-         // THIS IS THE MAIN SECTION THE MATH WILL BE DONE
+         // THIS IS THE SECTION THAT SETS EVERYTHING UP
          //************************************************
          Food food = new Food(100.0,100.0,20,20);
          foodList.addFirst(food);
-         
-         switch(screen)
+         //[0]; energy level required to activate
+         //[1]; new growth limit
+         //[2]; new growth inclination
+         //[3]; new curiosity
+         //[4]; new maternal min
+         //[5]; new maternal inclination
+         //[6]; new active level
+         //[7]; new temperament
+         int tendancies[] = new int[15];
+         for(int i = 0; i < 15; i++)
          {
-          case 0: //board
-            break;
-          case 1: //graph
-            break;
-           case 2: //about
-            break;
+           tendancies[i] = 0;
          }
+         Organism organism = new Organism(200.0,200.0,30.0,10000000,Color.BLUE,tendancies);
+         organismList.add(organism);
+    
          
       }
       //**************************************************
@@ -79,6 +85,14 @@ public class CellSurvivalPanel extends JPanel
              buffer.setColor(Color.WHITE);
              buffer.fillRect(0,0,N,N);
              foodList.element().draw(buffer);
+             organismList.element().examine(foodList.element().getX(),foodList.element().getY());
+             organismList.element().move();
+             if(organismList.element().collision(foodList.element().getX(),foodList.element().getY(),foodList.element().getEnergy()))
+             {
+               foodList.element().setX(Math.random()*1500);
+               foodList.element().setY(Math.random()*1500);
+             }
+             organismList.element().draw(buffer);
              break;
            case 1://graph
              buffer.setColor(Color.BLUE);

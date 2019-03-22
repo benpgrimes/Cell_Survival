@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.util.*;
+import java.util.ArrayList;
 import java.lang.Math;
 
 /******************************************
@@ -124,7 +125,7 @@ public class Organism extends Cell {
   * 5: idle
   * -1: choice failure
   ***********************************************/
-  public int choose(){
+  public int choose(){ 
     boolean first;
     int result = -1;
     do{
@@ -168,12 +169,21 @@ public class Organism extends Cell {
  *
  *
  *********************************************/
-  public void examine(double x, double y)
+  public void examine(ArrayList<Food> foodList)
   {
-    closestFoodX = x;
-    closestFoodY = y;
+    double min = distance(x,y,foodList.get(0).getX(),foodList.get(0).getY());
+    closestFoodX = foodList.get(0).getX();
+    closestFoodY = foodList.get(0).getY();
+      
+    for(int i = 0; i < foodList.size(); i++)
+    {
+      if(distance(x,y,foodList.get(i).getX(),foodList.get(i).getY()) < min)
+      {   
+        closestFoodX = foodList.get(i).getX();
+        closestFoodY = foodList.get(i).getY();
+      }
+    }
   }
-  
  /********************************************
  * moves towards the closest food
  *
@@ -225,6 +235,25 @@ public class Organism extends Cell {
     }
     return false;
   }
+/********************************************
+ * Increases the organisms diameter and 
+ * decreases the energy
+ *
+ *
+ *********************************************/ 
+  public void grow()
+  {
+    diam+=5;//later we could change this to more of a ratio between how big the cell is the more
+    energy -= 5;//energy it will take for it to grow or something
+  }
+  /*****************************************
+  *  Calculates distance
+  *******************************************/
+   private double distance(double x1, double y1, double x2, double y2)
+   {
+     double distance = Math.sqrt(Math.pow((x2-x1),2)+Math.pow((y2-y1),2));
+     return distance;
+   }
   
   public int getGrowthLimit() {
    return growthLimit;

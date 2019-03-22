@@ -37,8 +37,12 @@ public class Organism extends Cell {
   private int temperament;
   
   //the x and y coordinates of the closest food (set after examine)
-  private double closestFoodX;
-  private double closestFoodY;
+  //private double closestFoodX;
+  //private double closestFoodY;
+  
+  private Food[3] closestFood;
+  
+  private Organism[3] closestOrganism;
   
   //How these values change when the organism is at critical energy levels
   //[0]; energy level required to activate
@@ -53,6 +57,7 @@ public class Organism extends Cell {
   
   //stores the next choice the cell will execute
   private int choice = -1;
+  private int prevchoice = -1;
  
   /*************************
    * Constructor for Organism
@@ -128,10 +133,74 @@ public class Organism extends Cell {
     boolean first;
     int result = -1;
     do{
+      int ctr = 0;
+      int[] values = new int[5];
+      int temp;
+      int total = 0;
       first = this.choice == -1;
       result = this.choice;
-      //TO DO
+      int multiplier = 0;
+      if(this.diam !< this.growthLimit){
+        multiplier = this.growthInclination;
+      }
+      temp = atan(this.energy)/this.energy;
+      temp = temp*multiplier;
+      total += temp;
+      values[ctr] = temp;
+      ctr++;
+      multiplier = 0;
+      
+      if(this.choice != 2){
+        multiplier++;
+      }
+      if(this.prevchoice != 2){
+        multiplier++;
+      }
+      temp = multiplier*multiplier*curiosity;
+      total += temp;
+      values[ctr] = temp;
+      ctr++;
+      
+      temp = (atan(this.energy - this.maternalMin) + 1.5)*this.maternalInclination;
+      total += temp;
+      values[ctr] = temp;
+      ctr++;
+      
+      int combined = -(this.energy*this.energy) + total + 5;
+      total += combined;
+      int mindist = 9999999999;
+      for(int i = 0; i < 3; i++){
+        Food tempFood = closestFood[i];
+        int tempx = abs(tempFood.x - this.x);
+        int tempy = abs(tempFood.y - this.y);
+        int tempdist = sqrt((tempx*tempx) + (tempy*tempy));
+        if(tempdist < mindist){
+          mindist = tempdist;
+        }
+      }
+      temp = ((this.energy*5)-mindist) * this.active;
+      if(temp > combined){
+        temp = combined;
+      }
+      values[ctr] = temp;
+      ctr++;
+      temp = combined - temp;
+      values[ctr] = temp;
+      ctr = 0
+      
+      Random rand = new Random();
+      int choiceNum = rand.nextInt(total) + 1;
+      while(ctr < 5 && choiceNum > 0){
+        choiceNum -= values[ctr];
+        ctr++;
+      }
+      if(ctr <=5 && choiceNum <=0){
+        this.choice = ctr;
+      }else{
+        this.choice = -1;
+      }
     }while(first);
+    this.prevchoice = result;
     return result;
   } 
   

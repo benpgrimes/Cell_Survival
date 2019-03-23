@@ -40,7 +40,7 @@ public class Organism extends Cell {
   //private double closestFoodX;
   //private double closestFoodY;
   
-  private Food[3] closestFood;
+  private Food[] closestFood = new Food[3];
   
   private Organism[3] closestOrganism;
   
@@ -132,7 +132,8 @@ public class Organism extends Cell {
   public int choose(){
     boolean first;
     int result = -1;
-    do{
+    do
+    {
       int ctr = 0;
       int[] values = new int[5];
       int temp;
@@ -140,10 +141,11 @@ public class Organism extends Cell {
       first = this.choice == -1;
       result = this.choice;
       int multiplier = 0;
-      if(this.diam !< this.growthLimit){
+      if(this.diam >= this.growthLimit)//!< is not a command so i changed it to >=
+      {
         multiplier = this.growthInclination;
       }
-      temp = atan(this.energy)/this.energy;
+      temp = (int)(Math.atan(this.energy)/this.energy);//THIS HAD TO BE MADE AN INT
       temp = temp*multiplier;
       total += temp;
       values[ctr] = temp;
@@ -161,19 +163,19 @@ public class Organism extends Cell {
       values[ctr] = temp;
       ctr++;
       
-      temp = (atan(this.energy - this.maternalMin) + 1.5)*this.maternalInclination;
+      temp = (int)(Math.atan(this.energy - this.maternalMin) + 1.5)*this.maternalInclination;//I had to make this an int
       total += temp;
       values[ctr] = temp;
       ctr++;
       
       int combined = -(this.energy*this.energy) + total + 5;
       total += combined;
-      int mindist = 9999999999;
+      int mindist = 999999999;//I DECREASED THIS NUMBER BECAUSE IT WAS TO LARGE TO BE AN INT
       for(int i = 0; i < 3; i++){
         Food tempFood = closestFood[i];
-        int tempx = abs(tempFood.x - this.x);
-        int tempy = abs(tempFood.y - this.y);
-        int tempdist = sqrt((tempx*tempx) + (tempy*tempy));
+        int tempx = (int)Math.abs(tempFood.x - this.x);//these were also made ints
+        int tempy = (int)Math.abs(tempFood.y - this.y);// ''
+        int tempdist = (int)Math.sqrt((tempx*tempx) + (tempy*tempy));// ''
         if(tempdist < mindist){
           mindist = tempdist;
         }
@@ -186,7 +188,7 @@ public class Organism extends Cell {
       ctr++;
       temp = combined - temp;
       values[ctr] = temp;
-      ctr = 0
+      ctr = 0;
       
       Random rand = new Random();
       int choiceNum = rand.nextInt(total) + 1;

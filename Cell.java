@@ -22,7 +22,7 @@ public abstract class Cell {
     this.diam = diam;
   }
   
-  public void setEnergy (double energy){ //mutator
+  public void setEnergy (int energy){ //mutator
     this.energy = energy;
   }
   

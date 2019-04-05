@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
 import java.util.LinkedList;
+import java.util.ArrayList;
 
 public class CellSurvivalPanel extends JPanel
 {
@@ -16,6 +17,8 @@ public class CellSurvivalPanel extends JPanel
   private LinkedList<Food> foodList;
   private int numFood = 0;
   private int numCells = 0;
+  private ArrayList<Integer> population;
+  private int turnNum;
   
   public CellSurvivalPanel()
       {
@@ -26,6 +29,8 @@ public class CellSurvivalPanel extends JPanel
          t.start();
          organismList = new LinkedList<Organism>();
          foodList = new LinkedList<Food>();
+         population = new ArrayList<Integer>();
+         turnNum = 0;
          addMouseListener(new Mouse());
          
          //************************************************
@@ -145,11 +150,34 @@ public class CellSurvivalPanel extends JPanel
                  i--;
                  numCells--;
                }
+               if(turnNum %1000 == 0)
+               {
+                 population.add(numCells);
+               }
+               turnNum++;
              }
              break;
            case 1://graph
-             buffer.setColor(Color.BLUE);
+             buffer.setColor(Color.WHITE);
              buffer.fillRect(0,0,N,N);
+             buffer.setColor(Color.BLACK);
+             buffer.drawLine(100,100,100,1000);
+             buffer.drawLine(100,1000,1400,1000);
+             buffer.drawString("population:  ",20,45);
+             
+             buffer.setColor(Color.GRAY);
+             for(int i = 0; i < 900; i+=80)
+             {
+               
+               buffer.drawLine(100,1000-i,1400,1000-i);
+             }
+         
+             
+             buffer.setColor(Color.BLACK);
+             for(int i = 0; i < population.size()-1;i++)
+             {
+               buffer.drawLine(100+i*10,1000-population.get(i)*8,100+(i+1)*10,1000-population.get(i+1)*8);
+             }
              break;
            case 2://about
              buffer.setColor(Color.RED);
@@ -163,13 +191,9 @@ public class CellSurvivalPanel extends JPanel
            buffer.drawString("Board:  ",10,25);
            buffer.drawRect(10,10,90,20);
            
-           buffer.setColor(Color.BLACK); 
-           buffer.setFont(new Font("Monospaced", Font.BOLD, 24));
            buffer.drawString("Graph:  ",100,25);
            buffer.drawRect(100,10,90,20);
            
-           buffer.setColor(Color.BLACK); 
-           buffer.setFont(new Font("Monospaced", Font.BOLD, 24));
            buffer.drawString("About:  ",200,25);
            buffer.drawRect(190,10,90,20);
            repaint();

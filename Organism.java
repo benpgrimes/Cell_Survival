@@ -98,11 +98,16 @@ public class Organism extends Cell {
 	 * Description: Puts all the tendencies into a single array
 	 * 
 	 * @param None
-	 * @return integer array of all tendencies (15 values) in the order shown: [0];
-	 *         energy level required to activate [1]; new growth limit [2]; new
-	 *         growth inclination [3]; new curiosity [4]; new maternal minimum [5];
-	 *         new maternal inclination [6]; new active level [7]; new temperament
-	 *         [8-14] preservation in same order
+	 * @return integer array of all tendencies (15 values) in the order shown: 
+	 * [0]; energy level required to activate 
+	 * [1]; new growth limit 
+	 * [2]; new growth inclination 
+	 * [3]; new curiosity 
+	 * [4]; new maternal minimum 
+	 * [5]; new maternal inclination 
+	 * [6]; new active level 
+	 * [7]; new temperament
+	 * [8-14] preservation in same order
 	 *******************************************/
 	public int[] getTendencies() {
 		int[] tendencies = new int[15];
@@ -123,8 +128,13 @@ public class Organism extends Cell {
 	 * returns the choice made as well as makes its next choice.
 	 * 
 	 * @param None
-	 * @return returns an integer based on the choice. Follows this pattern: 1: Grow
-	 *         2: examine 3: split 4: move 5: idle -1: choice failure
+	 * @return returns an integer based on the choice. Follows this pattern: 
+	 * 1: Grow
+	 * 2: examine 
+	 * 3: split 
+	 * 4: move 
+	 * 5: idle 
+	 * -1: choice failure
 	 ***********************************************/
 	public int choose() {
 		boolean first;
@@ -159,7 +169,7 @@ public class Organism extends Cell {
 			first = this.choice == -1;
 			result = this.choice;
 			int multiplier = 0;
-			if (this.diam >= growthLim)// !< is not a command so i changed it to >=
+			if (this.diam < growthLim)// !< is not a command so i changed it to >=
 			{
 				multiplier = growthInc;
 			}
@@ -180,8 +190,12 @@ public class Organism extends Cell {
 			total += temp;
 			values[ctr] = temp;
 			ctr++;
-
-			temp = (int) (Math.atan(this.energy - maternalM) + 1.5) * maternalInc;// I had to make this an int
+			if (this.diam < growthLim)// !< is not a command so i changed it to >=
+			{
+				multiplier = 0;
+			}else{
+				multiplier = maternalInc;
+			temp = (int) (Math.atan(this.energy - maternalM) + 1.5) * multiplier;// I had to make this an int
 			total += temp;
 			values[ctr] = temp;
 			ctr++;
@@ -253,6 +267,40 @@ public class Organism extends Cell {
 		}
 		return 0;
 	}
+		
+		/********************************************
+	 * moves towards the closest food
+	 *
+	 *
+	 *********************************************/
+	public void grow() {
+		
+		
+	}
+	public void move() {
+
+		if (energy > 0) {
+			// Checks X
+			if (closestFood[0].x > (x + 5)) {
+				x += 5;
+				energy -= 1;
+			} else if (closestFood[0].x < (x - 5)) {
+				x -= 5;
+				energy -= 1;
+			}
+		}
+		if (energy > 0) {
+			// Checks y
+			if (closestFood[0].y > (y + 5)) {
+				y += 5;
+				energy -= 1;
+			} else if (closestFood[0].y < (y - 5)) {
+				y -= 5;
+				energy -= 1;
+			}
+		}
+	}
+		
 	/*
 	 * THIS SHOULD BE DONE IN THE PANNEL public void die(){ Food food = new
 	 * Food(this.x, this.y, this.diam, int(this.diam));
@@ -280,35 +328,6 @@ public class Organism extends Cell {
 		for (int i = 0; i < 3; i++) {
 			this.closestOrganism[i] = x[i];
 			this.closestFood[i] = y[i];
-		}
-	}
-
-	/********************************************
-	 * moves towards the closest food
-	 *
-	 *
-	 *********************************************/
-	public void move() {
-
-		if (energy > 0) {
-			// Checks X
-			if (closestFood[0].x > (x + 5)) {
-				x += 5;
-				energy -= 1;
-			} else if (closestFood[0].x < (x - 5)) {
-				x -= 5;
-				energy -= 1;
-			}
-		}
-		if (energy > 0) {
-			// Checks y
-			if (closestFood[0].y > (y + 5)) {
-				y += 5;
-				energy -= 1;
-			} else if (closestFood[0].y < (y - 5)) {
-				y -= 5;
-				energy -= 1;
-			}
 		}
 	}
 

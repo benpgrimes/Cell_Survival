@@ -21,7 +21,7 @@ public class Organism extends Cell {
 	// x^2 based on last use
 	private int curiosity;
 
-	// minimum for splitting
+	// minimum for ting
 	// x
 	private int maternalMin;
 
@@ -40,9 +40,9 @@ public class Organism extends Cell {
 	// private double closestFoodX;
 	// private double closestFoodY;
 
-	private Food[] closestFood = new Food[3];
+	private Cell[] closestFood = new Food[3];
 
-	private Organism[] closestOrganism = new Organism[3];
+	private Cell[] closestOrganism = new Organism[3];
 
 	// How these values change when the organism is at critical energy levels
 	// [0]; energy level required to activate
@@ -195,6 +195,7 @@ public class Organism extends Cell {
 				multiplier = 0;
 			}else{
 				multiplier = maternalInc;
+			}
 			temp = (int) (Math.atan(this.energy - maternalM) + 1.5) * multiplier;// I had to make this an int
 			total += temp;
 			values[ctr] = temp;
@@ -268,15 +269,63 @@ public class Organism extends Cell {
 		return 0;
 	}
 		
-		/********************************************
+	public void grow() {
+		float r = diam / 2;
+		float area = 3.14159*(r*r);
+		area += 25;			//CHECK
+		float newdiam = area/3.14159;
+		newdiam = sqrt(newdiam) * 2;
+		newdiam += 1;
+		this.diam = (int) newdiam;
+		reduceEnergy(10);		//CHECK
+	}
+	/********************************************
+	 * updates the closest food coordinates
+	 *
+	 *
+	 *********************************************/
+	public void examine(Cell[] x, Cell[] y) {
+		for (int i = 0; i < 3; i++) {
+			this.closestOrganism[i] = x[i];
+			this.closestFood[i] = y[i];
+		}
+		reduceEnergy(2);
+	}
+	
+	public Organism split(){
+		int[] newTendencies = getTendencies();
+		Random rand = new Random();
+		int randNum;
+		int pos;
+		int multiplier;
+		for(int i = 0; i < 16; i++){
+			randNum = rand.nextInt(15);
+			pos = rand.nextInt(2);
+			multiplier = 1;
+			if(pos == 0){
+				multiplier = -1
+			}
+			if(randNum >= 14){
+				newTendencies[i] += 3*multiplier;
+			}else if(randvalue >= 12){
+				newTendencies[i] += 2*multiplier;
+			}else if(randvalue >= 7){
+				newTendencies[i] += multiplier;
+			}
+		}
+		this.diam = this.diam/2;
+		this.energy = this.energy/2;
+		Color newColor = new Color(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255))
+		Organism child = new Organism(this.x-1, this.y-1, this.diam, this.energy, newColor, newTendencies);
+		reduceEnergy(4);
+		return child;
+	}
+	
+	/********************************************
 	 * moves towards the closest food
 	 *
 	 *
 	 *********************************************/
-	public void grow() {
-		
-		
-	}
 	public void move() {
 
 		if (energy > 0) {
@@ -300,7 +349,13 @@ public class Organism extends Cell {
 			}
 		}
 	}
-		
+	
+	public void idle(){
+		reduceEnergy(1);
+	}
+	
+	public void reduceEnergy(int x){
+		this.energy -= x;
 	/*
 	 * THIS SHOULD BE DONE IN THE PANNEL public void die(){ Food food = new
 	 * Food(this.x, this.y, this.diam, int(this.diam));
@@ -317,18 +372,6 @@ public class Organism extends Cell {
 	public void draw(Graphics myBuffer) {
 		myBuffer.setColor(color);
 		myBuffer.fillOval((int) x, (int) y, (int) diam, (int) diam);
-	}
-
-	/********************************************
-	 * updates the closest food coordinates
-	 *
-	 *
-	 *********************************************/
-	public void examine(Organism[] x, Food[] y) {
-		for (int i = 0; i < 3; i++) {
-			this.closestOrganism[i] = x[i];
-			this.closestFood[i] = y[i];
-		}
 	}
 
 	/********************************************

@@ -99,15 +99,14 @@ public class Organism extends Cell {
 	 * 
 	 * @param None
 	 * @return integer array of all tendencies (15 values) in the order shown: 
-	 * [0]; energy level required to activate 
-	 * [1]; new growth limit 
-	 * [2]; new growth inclination 
-	 * [3]; new curiosity 
-	 * [4]; new maternal minimum 
-	 * [5]; new maternal inclination 
-	 * [6]; new active level 
-	 * [7]; new temperament
-	 * [8-14] preservation in same order
+	 * [0]; new growth limit 
+	 * [1]; new growth inclination 
+	 * [2]; new curiosity 
+	 * [3]; new maternal minimum 
+	 * [4]; new maternal inclination 
+	 * [5]; new active level 
+	 * [6]; new temperament
+	 * [7-14] preservation in same order
 	 *******************************************/
 	public int[] getTendencies() {
 		int[] tendencies = new int[15];
@@ -289,7 +288,7 @@ public class Organism extends Cell {
 			this.closestOrganism[i] = x[i];
 			this.closestFood[i] = y[i];
 		}
-		reduceEnergy(2);
+		reduceEnergy(2);		//CHECK
 	}
 	
 	public Organism split(){
@@ -315,9 +314,9 @@ public class Organism extends Cell {
 		}
 		this.diam = this.diam/2;
 		this.energy = this.energy/2;
-		Color newColor = new Color(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255))
+		Color newColor = new Color(newTendencies[2]%255, newTendencies[5]%255, newTendencies[6]%255)
 		Organism child = new Organism(this.x-1, this.y-1, this.diam, this.energy, newColor, newTendencies);
-		reduceEnergy(4);
+		reduceEnergy(4);		//CHECK
 		return child;
 	}
 	

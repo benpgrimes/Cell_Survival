@@ -180,22 +180,48 @@ public class CellSurvivalPanel extends JPanel
              }
              break;
            case 2://about
-             buffer.setColor(Color.RED);
+             buffer.setColor(Color.BLACK);
              buffer.fillRect(0,0,N,N);
+             buffer.setColor(Color.LIGHT_GRAY);
+             buffer.fillRect(170,313,800,100);
+             buffer.setColor(Color.GRAY);
+             buffer.drawString("CoolDevelopers welcomes you to...", 170, 300);
+             buffer.setFont(new Font("Helvetica",Font.BOLD, 100));
+             buffer.setColor(Color.BLACK);
+             buffer.drawString("CELL SURVIVAL", 170, 400);
+             buffer.setColor(Color.WHITE);
+             buffer.setFont(new Font("Helvetica",Font.PLAIN, 40));
+             buffer.drawString("A biologically inspired simulation where “cells\"compete", 170, 500);   
+             buffer.drawString("for resources and mutate in random ways every time they split.", 170, 550);
+             buffer.drawString("As they mutate, their behavior may change between cells.", 170, 600);
+             buffer.drawString("This can either help or harm them in the long run.", 170, 650);
+             buffer.drawString("Should a cell chase after the closest food, or go towards", 170, 700);
+             buffer.drawString("the one with least competition? How big should it get?", 170, 750);
+             buffer.drawString("How often should it split? As the simulation goes on, watch as", 170, 800);
+             buffer.drawString("survival of the fittest takes place right before your eyes!", 170, 850);
              break;
            }
            
-           //THIS IS CREATING THE TAB LABLES        
+           //THIS IS CREATING THE TAB LABLES  
+           buffer.setColor(Color.BLACK);
+           buffer.fillRect(0,0,300,50);
+           buffer.setColor(Color.WHITE);
+           buffer.fillRect(5,5,290,42);
+          
            buffer.setColor(Color.BLACK); 
            buffer.setFont(new Font("Monospaced", Font.BOLD, 24));
-           buffer.drawString("Board:  ",10,25);
-           buffer.drawRect(10,10,90,20);
+           buffer.drawString("BOARD  ",20,35); //added 20 from previous           
+           buffer.fillRect(97, 5, 5,45);
            
-           buffer.drawString("Graph:  ",100,25);
-           buffer.drawRect(100,10,90,20);
+           buffer.setColor(Color.BLACK); 
+           buffer.setFont(new Font("Monospaced", Font.BOLD, 24));
+           buffer.drawString("GRAPH  ",110,35);
+           buffer.fillRect(197, 5, 5,45);
            
-           buffer.drawString("About:  ",200,25);
-           buffer.drawRect(190,10,90,20);
+           buffer.setColor(Color.BLACK);
+           buffer.setFont(new Font("Monospaced", Font.BOLD, 24));
+           buffer.drawString("ABOUT  ",210,35);
+
            repaint();
       }
    }

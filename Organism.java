@@ -41,6 +41,8 @@ public class Organism extends Cell {
   private double closestFoodX;
   private double closestFoodY;
   
+  private Food[] closestFood = new Food[3];
+  
   //How these values change when the organism is at critical energy levels
   //[0]; energy level required to activate
   //[1]; new growth limit
@@ -54,6 +56,7 @@ public class Organism extends Cell {
   
   //stores the next choice the cell will execute
   private int choice = -1;
+  private int prevchoice = -1;
  
   /*************************
    * Constructor for Organism
@@ -125,18 +128,97 @@ public class Organism extends Cell {
   * 5: idle
   * -1: choice failure
   ***********************************************/
-  public int choose(){ 
+  public int choose(){
     boolean first;
     int result = -1;
-    do{
+    //do
+    //{
+      int ctr = 0;
+      int[] values = new int[5];
+      int temp;
+      int total = 0;
       first = this.choice == -1;
       result = this.choice;
-      //TO DO
-    }while(first);
+      int multiplier = 0;
+      if(this.diam >= this.growthLimit)//!< is not a command so i changed it to >=
+      {
+        multiplier = this.growthInclination;
+      }
+      temp = (int)(Math.atan(this.energy)/this.energy);//THIS HAD TO BE MADE AN INT
+      temp = temp*multiplier;
+      total += temp;
+      values[ctr] = temp;
+      ctr++;
+      multiplier = 0;
+      
+      if(this.choice != 2){
+        multiplier++;
+      }
+      if(this.prevchoice != 2){
+        multiplier++;
+      }
+      temp = multiplier*multiplier*curiosity;
+      total += temp;
+      values[ctr] = temp;
+      ctr++;
+      
+      temp = (int)(Math.atan(this.energy - this.maternalMin) + 1.5)*this.maternalInclination;//I had to make this an int
+      total += temp;
+      values[ctr] = temp;
+      ctr++;
+      
+      int combined = -(this.energy*this.energy) + total + 5;
+      total += combined;
+      int mindist = 999999999;//I DECREASED THIS NUMBER BECAUSE IT WAS TO LARGE TO BE AN INT
+      for(int i = 0; i < 3; i++){
+        Food tempFood = closestFood[i];
+        int tempx = (int)Math.abs(tempFood.x - this.x);//these were also made ints
+        int tempy = (int)Math.abs(tempFood.y - this.y);// ''
+        int tempdist = (int)Math.sqrt((tempx*tempx) + (tempy*tempy));// ''
+        if(tempdist < mindist){
+          mindist = tempdist;
+        }
+      }
+      temp = ((this.energy*5)-mindist) * this.active;
+      if(temp > combined){
+        temp = combined;
+      }
+      values[ctr] = temp;
+      ctr++;
+      temp = combined - temp;
+      values[ctr] = temp;
+      ctr = 0;
+      
+      Random rand = new Random();
+      int choiceNum = rand.nextInt(Math.abs(total)) + 1;
+      while(ctr < 5 && choiceNum > 0){
+        choiceNum -= values[ctr];
+        ctr++;
+      }
+      if(ctr <=5 && choiceNum <=0){
+        this.choice = ctr;
+      }else{
+        this.choice = -1;
+      }
+    //}while(first);
+    this.prevchoice = result;
     return result;
   } 
   
- 
+ /********************************************
+ * Basic choose for testing purposes
+ *
+ * 0-5 = grow
+ * 5-35 = examine
+ * 35-40 = split
+ * 40-75 = move
+ * 75 = idle
+ *
+ *********************************************/ 
+  public int basicChoose()
+  {
+    return (int)(Math.random()*100);
+  }
  /********************************************
  * returns the direction that the cell wishes to move
  *
@@ -169,9 +251,12 @@ public class Organism extends Cell {
  *
  *
  *********************************************/
-  public void examine(ArrayList<Food> foodList)
+  public void examine(LinkedList<Food> foodList)
   {
-    double min = distance(x,y,foodList.get(0).getX(),foodList.get(0).getY());
+    closestFood[0]=foodList.get(0);
+    closestFood[1]=foodList.get(1);
+    closestFood[2]=foodList.get(2);
+    double min= distance(x,y,foodList.get(0).getX(),foodList.get(0).getY());
     closestFoodX = foodList.get(0).getX();
     closestFoodY = foodList.get(0).getY();
       
@@ -230,7 +315,7 @@ public class Organism extends Cell {
   {
     if(Math.abs(foodX - x) <= diam && Math.abs(foodY - y) <= diam)
     {
-      energy += foodEnergy;
+      energy += foodEnergy*100;
       return true;
     }
     return false;
@@ -243,9 +328,35 @@ public class Organism extends Cell {
  *********************************************/ 
   public void grow()
   {
-    diam+=5;//later we could change this to more of a ratio between how big the cell is the more
-    energy -= 5;//energy it will take for it to grow or something
+    diam+=2;//later we could change this to more of a ratio between how big the cell is the more
+    energy -= 4*(diam/2.0);//energy it will take for it to grow or something
   }
+  /********************************************
+ * Organism stays idle
+ * decreases the energy
+ *
+ *
+ *********************************************/ 
+  public void idle()
+  {
+    energy -= 2;
+  }
+ /********************************************
+ * Split
+ * 
+ *
+ *double x, double y, double diam, int energy, Color color, int[] tendencies
+ *********************************************/ 
+  public Organism split()
+  {
+    int[] tendencies = getTendencies();
+    Color c = new Color((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255));
+    Organism child = new Organism(x+diam/2, y+diam/2, diam/2, energy/2, c, tendencies);
+    diam = diam/2;
+    energy = energy/2;
+    return child;
+  }
+
   /*****************************************
   *  Calculates distance
   *******************************************/

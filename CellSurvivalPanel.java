@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class CellSurvivalPanel extends JPanel
 {
@@ -12,8 +12,8 @@ public class CellSurvivalPanel extends JPanel
   private Timer t;
   private static final int N = 1500;
   private static int screen = 0;
-  private ArrayList<Organism> organismList;
-  private ArrayList<Food> foodList;
+  private LinkedList<Organism> organismList;
+  private LinkedList<Food> foodList;
   private int numFood = 0;
   private int numCells = 0;
   
@@ -24,8 +24,8 @@ public class CellSurvivalPanel extends JPanel
          buffer = myImage.getGraphics();    
          t = new Timer(10, new Listener());
          t.start();
-         organismList = new ArrayList<Organism>();
-         foodList = new ArrayList<Food>();
+         organismList = new LinkedList<Organism>();
+         foodList = new LinkedList<Food>();
          addMouseListener(new Mouse());
          
          //************************************************
@@ -34,12 +34,15 @@ public class CellSurvivalPanel extends JPanel
           /**********************************
              *  creates new food
              ***********************************/
-             for(int i = 0; i < 4; i++)
+             for(int i = 0; i < 8; i++)
              {
                 Food food = new Food(Math.random()*1500,Math.random()*1460+20,20,20);
                 foodList.add(food);
                 numFood++;
               }
+             foodList.get(1).setColor(Color.PINK);
+             foodList.get(2).setColor(Color.GREEN);
+             foodList.get(3).setColor(Color.ORANGE);
              /**********************************
              *  creates new Organism
              ***********************************/
@@ -48,9 +51,9 @@ public class CellSurvivalPanel extends JPanel
                int tendancies[] = new int[15];
                for(int j = 0; j < 15; j++)
                {
-                 tendancies[j] = 0;
+                 tendancies[j] = 1;
                }
-               Organism organism = new Organism(Math.random()*1500,Math.random()*1500,30.0,10000000,Color.BLUE,tendancies);
+               Organism organism = new Organism(Math.random()*1500,Math.random()*1500,30.0,100000,Color.BLUE,tendancies);
                organismList.add(organism);
                numCells++;
              }
@@ -104,22 +107,44 @@ public class CellSurvivalPanel extends JPanel
              //Iterates through Organism list
              for(int i = 0; i < numCells; i++)
              {
-               organismList.get(i).examine(foodList);
                organismList.get(i).move();
-               // organismList.element().grow();
-               
-               //Checks for collision
-               for(int j = 0; j < numFood; j++)
+               int temp = organismList.get(i).basicChoose();
+               if(temp < 6)
+                 organismList.get(i).grow();
+               else if(temp < 36)
+                 organismList.get(i).examine(foodList);
+               else if(temp  < 38 && organismList.get(i).getDiam() > 50)
                {
-                 if(organismList.get(i).collision(foodList.get(j).getX(),foodList.get(j).getY(),
-                                                  foodList.get(j).getEnergy()))
-                 {
-                   foodList.get(j).setX(Math.random()*1500);
-                   foodList.get(j).setY(Math.random()*1460+20);
-                 }
+                 Organism child;
+                 child = organismList.get(i).split();
+                 organismList.add(child);
+                 numCells++;
                }
+               else if(temp < 76)
+                 organismList.get(i).move();
+               else
+                 organismList.get(i).idle();
+              
+               //Checks for collision
+               if(i>0)
+               {
+                 for(int j = 0; j < numFood; j++)
+                 {
+                   if(organismList.get(i).collision(foodList.get(j).getX(),foodList.get(j).getY(),
+                                                    foodList.get(j).getEnergy()))
+                   {
+                     foodList.get(j).setX(Math.random()*1500);
+                     foodList.get(j).setY(Math.random()*1460+20);
+                   }
+                 }
                  organismList.get(i).draw(buffer);
-                 
+               }
+               if(organismList.get(i).getEnergy() <= 0)
+               {
+                 organismList.remove(i);
+                 i--;
+                 numCells--;
+               }
              }
              break;
            case 1://graph

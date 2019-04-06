@@ -355,7 +355,7 @@ public class Organism extends Cell {
 	 *
 	 *********************************************/
 	public void move() {
-		if(closestFood[2] != null) {
+		if(closestFood[0] != null) {
 			if (energy > 0) {
 		
 			// Checks X

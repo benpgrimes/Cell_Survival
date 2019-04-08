@@ -173,7 +173,7 @@ public class Organism extends Cell {
 				multiplier = growthInc;
 			}
 			//temp = (int) Math.abs((Math.atan(this.energy) / this.energy)*100*multiplier);// THIS HAD TO BE MADE AN INT
-			temp = (int) (growthLim - this.diam) * multiplier;
+			temp = (int) (growthLim - this.diam)/5 + (this.energy/10) * multiplier;
 			if(temp < 0) {
 				temp = 0;
 			}
@@ -245,7 +245,6 @@ public class Organism extends Cell {
 				ctr = 0;
 				while (ctr < 5 && choiceNum > 0) {
 					choiceNum -= values[ctr];
-					System.out.println(ctr + ": " + values[ctr]);
 					ctr++;
 				}
 				this.choice = ctr;
@@ -357,7 +356,7 @@ public class Organism extends Cell {
 		}
 		this.diam = this.diam/2;
 		this.energy = this.energy/2;
-		Color newColor = new Color(Math.abs((newTendencies[2]*3)%255), Math.abs((newTendencies[5]*3)%255), Math.abs((newTendencies[6]*3)%255));
+		Color newColor = new Color(Math.abs((newTendencies[2]*5)%255), Math.abs((newTendencies[5]*5)%255), Math.abs((newTendencies[6]*5)%255));
 		Organism child = new Organism(this.x-1, this.y-1, this.diam, this.energy, newColor, newTendencies);
 		reduceEnergy(4);		//CHECK
 		return child;

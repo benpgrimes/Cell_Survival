@@ -41,7 +41,7 @@ public class CellSurvivalPanel extends JPanel
              ***********************************/
              for(int i = 0; i < 8; i++)
              {
-                Food food = new Food(Math.random()*1500,Math.random()*1460+20,20,20);
+                Food food = new Food(Math.random()*1500,Math.random()*1460+20,20,500);
                 foodList.add(food);
                 numFood++;
               }
@@ -58,7 +58,7 @@ public class CellSurvivalPanel extends JPanel
                {
                  tendancies[j] = 1;
                }
-               Organism organism = new Organism(Math.random()*1500,Math.random()*1500,30.0,100000,Color.BLUE,tendancies);
+               Organism organism = new Organism(Math.random()*1500,Math.random()*1500,30.0,10000,Color.BLUE,tendancies);
                organismList.add(organism);
                numCells++;
              }
@@ -113,21 +113,21 @@ public class CellSurvivalPanel extends JPanel
              for(int i = 0; i < numCells; i++)
              {
                organismList.get(i).move();
-               int temp = organismList.get(i).basicChoose();
-               if(temp < 6)
+               int temp = organismList.get(i).choose();
+               if(temp == 1)
                  organismList.get(i).grow();
-               else if(temp < 36)
-                 organismList.get(i).examine(foodList);
-               else if(temp  < 38 && organismList.get(i).getDiam() > 50)
+               else if(temp == 2)
+                 organismList.get(i).examine(organismList, foodList, numCells, numFood);
+               else if(temp == 3)
                {
                  Organism child;
                  child = organismList.get(i).split();
                  organismList.add(child);
                  numCells++;
                }
-               else if(temp < 76)
+               else if(temp == 4)
                  organismList.get(i).move();
-               else
+               else if(temp == 5)
                  organismList.get(i).idle();
               
                //Checks for collision

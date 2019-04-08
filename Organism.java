@@ -162,9 +162,9 @@ public class Organism extends Cell {
 		}
 		do {
 			int ctr = 0;
-			int[] values = new int[5];
-			int temp;
-			int total = 0;
+			long[] values = new long[5];
+			long temp;
+			long total = 0;
 			first = this.choice == -1;
 			result = this.choice;
 			int multiplier = 0;
@@ -172,7 +172,11 @@ public class Organism extends Cell {
 			{
 				multiplier = growthInc;
 			}
-			temp = (int) Math.abs((Math.atan(this.energy) / this.energy)*multiplier);// THIS HAD TO BE MADE AN INT
+			//temp = (int) Math.abs((Math.atan(this.energy) / this.energy)*100*multiplier);// THIS HAD TO BE MADE AN INT
+			temp = (int) (growthLim - this.diam) * multiplier;
+			if(temp < 0) {
+				temp = 0;
+			}
 			total += temp;
 			values[ctr] = temp;
 			ctr++;
@@ -194,14 +198,18 @@ public class Organism extends Cell {
 			}else{
 				multiplier = maternalInc;
 			}
-			temp = (int) Math.abs((Math.atan(this.energy - maternalM) + 1.5) * multiplier);// I had to make this an int
+			//temp = (int) ((Math.atan(this.energy - maternalM)*100) + 1.5)* multiplier;// I had to make this an int
+			temp = (this.energy - maternalM) * multiplier;
+			if(temp < 0) {
+				temp = 0;
+			}
 			total += temp;
 			values[ctr] = temp;
 			ctr++;
 
-			int combined = Math.abs(-(this.energy * this.energy) + total) + 5;
+			long combined = total;
 			int mindist = 999999999;// I DECREASED THIS NUMBER BECAUSE IT WAS TO LARGE TO BE AN INT
-			if (closestFood[2] != null) {
+			if (this.closestFood[2] != null) {
 				total += combined;
 				for (int i = 0; i < 3; i++) {
 					Cell tempFood = closestFood[i];
@@ -216,27 +224,31 @@ public class Organism extends Cell {
 				if (temp > combined) {
 					temp = combined;
 				}
+				values[ctr] = temp;
+				ctr++;
+				temp = combined - temp;
+				values[ctr] = temp;
+				ctr = 0;
 			} else {
 				temp = act;
 				total += values[1] + 5;
-				values[1] = values[1] * 2 + 5;
-			}
-			values[ctr] = temp;
-			ctr++;
-			temp = combined - temp;
-			values[ctr] = temp;
-			ctr = 0;
-
-			Random rand = new Random();
-			int choiceNum = rand.nextInt(total) + 1;
-			while (ctr < 5 && choiceNum >= 0) {
-				choiceNum -= values[ctr];
+				values[1] = (values[1] * 2) + 5;
+				values[ctr] = 0;
 				ctr++;
+				values[ctr] = 0;
 			}
-			if (ctr <= 5 && choiceNum <= 0) {
+			Random rand = new Random();
+			if(total == 0) {
+				choice = 5;
+			}else {
+				long choiceNum = (rand.nextLong()%total) + 1;
+				ctr = 0;
+				while (ctr < 5 && choiceNum > 0) {
+					choiceNum -= values[ctr];
+					System.out.println(ctr + ": " + values[ctr]);
+					ctr++;
+				}
 				this.choice = ctr;
-			} else {
-				this.choice = -1;
 			}
 		} while (first);
 		this.prevchoice = result;
@@ -285,7 +297,7 @@ public class Organism extends Cell {
 	    for(int i = 0; i < 3; i++) {
 	    	Cell closeFood = null;
 		    for (int j = 0; j < numFood; j++) {
-		    	if(j != index1 || j != index2) {
+		    	if(j != index1 && j != index2) {
 					Cell tempFood = (Cell) foodList.get(j);
 					int tempx = (int) Math.abs(tempFood.x - this.x);// these were also made ints
 					int tempy = (int) Math.abs(tempFood.y - this.y);// ''
@@ -299,12 +311,13 @@ public class Organism extends Cell {
 		    }
 		    
 	    	this.closestFood[i] = closeFood;
+	    	mindist = 999999;
 	    }
 	    for(int i = 0; i < 3; i++) {
 		    Cell closeOrganism = null;
-			for (int j = 0; j < numFood; j++) {
+			for (int j = 0; j < numOrganisms; j++) {
 			    if(j != index1 || j != index2) {
-					Cell tempOrganism = (Cell) foodList.get(j);
+					Cell tempOrganism = (Cell) Organisms.get(j);
 					int tempx = (int) Math.abs(tempOrganism.x - this.x);// these were also made ints
 					int tempy = (int) Math.abs(tempOrganism.y - this.y);// ''
 					int tempdist = (int) Math.sqrt((tempx * tempx) + (tempy * tempy));// ''
@@ -315,7 +328,8 @@ public class Organism extends Cell {
 					}
 			    }
 			}
-		    	this.closestOrganism[i] = closeOrganism;
+		    this.closestOrganism[i] = closeOrganism;
+		    mindist = 999999;
 	    }
 		reduceEnergy(2);		//CHECK
 	}
@@ -343,7 +357,7 @@ public class Organism extends Cell {
 		}
 		this.diam = this.diam/2;
 		this.energy = this.energy/2;
-		Color newColor = new Color(Math.abs(newTendencies[2]%255), Math.abs(newTendencies[5]%255), Math.abs(newTendencies[6]%255));
+		Color newColor = new Color(Math.abs((newTendencies[2]*3)%255), Math.abs((newTendencies[5]*3)%255), Math.abs((newTendencies[6]*3)%255));
 		Organism child = new Organism(this.x-1, this.y-1, this.diam, this.energy, newColor, newTendencies);
 		reduceEnergy(4);		//CHECK
 		return child;
@@ -411,7 +425,7 @@ public class Organism extends Cell {
 	 *
 	 *********************************************/
 	public boolean collision(double foodX, double foodY, int foodEnergy) {
-		if (Math.abs(foodX - x) <= diam && Math.abs(foodY - y) <= diam) {
+		if (Math.abs(foodX - x) <= (diam/2) && Math.abs(foodY - y) <= (diam/2)) {
 			energy += foodEnergy;
 			return true;
 		}

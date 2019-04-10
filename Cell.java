@@ -49,5 +49,12 @@ public abstract class Cell {
   public Color getColor(){ //accessor
     return color;
   } 
+  public int[] garbageTendencies(){
+	  int[] tendencies = new int[15];
+	  for(int i = 0; i < 15; i++) {
+		  tendencies[i] = 0;
+	  }
+	  return tendencies;
+  }
   public abstract void draw(Graphics myBuffer);
 }

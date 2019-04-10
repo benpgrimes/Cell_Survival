@@ -56,7 +56,7 @@ public class CellSurvivalPanel extends JPanel
                int tendancies[] = new int[15];
                for(int j = 0; j < 15; j++)
                {
-                 tendancies[j] = 1;
+                 tendancies[j] = 100;
                }
                Organism organism = new Organism(Math.random()*1500,Math.random()*1500,30.0,10000,Color.BLUE,tendancies);
                organismList.add(organism);

@@ -414,6 +414,8 @@ public class Organism extends Cell {
 	 *********************************************/
 
 	public void draw(Graphics myBuffer) {
+		myBuffer.setColor(color.BLACK);
+		myBuffer.fillOval((int) x - 5, (int) y - 5, (int) diam + 10, (int) diam + 10);
 		myBuffer.setColor(color);
 		myBuffer.fillOval((int) x, (int) y, (int) diam, (int) diam);
 	}

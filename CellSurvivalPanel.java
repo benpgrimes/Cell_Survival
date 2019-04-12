@@ -45,9 +45,7 @@ public class CellSurvivalPanel extends JPanel
                 foodList.add(food);
                 numFood++;
               }
-             foodList.get(1).setColor(Color.PINK);
-             foodList.get(2).setColor(Color.GREEN);
-             foodList.get(3).setColor(Color.ORANGE);
+             
              /**********************************
              *  creates new Organism
              ***********************************/

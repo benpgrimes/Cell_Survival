@@ -66,23 +66,22 @@ public class CellSurvivalPanel extends JPanel
       // The mouse adapter is what recognizes where the 
       // mouse is being clicked
       //**************************************************
-      private class Mouse extends MouseAdapter
-      {
-        public void mousePressed( MouseEvent e )
-        {
-          if(e.isMetaDown() == false)//checks if left click
-          {
-            if(e.getX() < 180 && e.getY() <50)
-              screen = 0;
-            else if(e.getX() < 360 && e.getY() <50)
-              screen = 1;
-            else if(e.getX() < 540 && e.getY() <50)
-              screen = 2;
-            System.out.println("X: "+e.getX()+" Y: "+e.getY());
-          } 
-          
-        }
-      }
+  	private class Mouse extends MouseAdapter
+  	{
+  		public void mousePressed( MouseEvent e )
+  		{
+  			if(e.isMetaDown() == false)//checks if left click
+  			{
+  			if(e.getX() < 83 && e.getY() <25)
+  				screen = 0;
+  			else if(e.getX() < 169 && e.getY() <50)
+  				screen = 1;
+  			else if(e.getX() < 251 && e.getY() <50)
+  				screen = 2;
+  			System.out.println("X: "+e.getX()+" Y: "+e.getY());
+  			} 
+  		}
+  }
       //**************************************************
       //  the action listener is the section where things
       //  get drawn to the screen.  i.e. every thime the

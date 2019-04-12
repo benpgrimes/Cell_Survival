@@ -44,7 +44,7 @@ public class Food extends Cell{
 	myBuffer.setColor(color.BLACK);
     myBuffer.fillOval((int)x,(int)y,(int)diam, (int)diam);
 	myBuffer.setColor(color.WHITE);
-    myBuffer.fillOval((int)x+3,(int)y+3,(int)diam-7, (int)diam-7);
+    myBuffer.fillOval((int)x+4,(int)y+4,(int)diam-8, (int)diam-8);
   } 
   public double getX()
   {

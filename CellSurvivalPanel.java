@@ -242,25 +242,95 @@ public class CellSurvivalPanel extends JPanel
              }
              break;
            case 2://about
-             buffer.setColor(Color.BLACK);
+                          buffer.setColor(Color.BLACK);
              buffer.fillRect(0,0,N,N);
-             buffer.setColor(Color.LIGHT_GRAY);
-             buffer.fillRect(170,313,800,100);
-             buffer.setColor(Color.GRAY);
-             buffer.drawString("CoolDevelopers welcomes you to...", 170, 300);
-             buffer.setFont(new Font("Helvetica",Font.BOLD, 100));
-             buffer.setColor(Color.BLACK);
-             buffer.drawString("CELL SURVIVAL", 170, 400);
+             buffer.setColor(Color.DARK_GRAY);
+             buffer.fillRect(170,423,1050,150);
+             buffer.setColor(Color.WHITE);
+             buffer.setFont(new Font("Helvetica",Font.BOLD, 60));
+             buffer.drawString("Welcome to...", 170, 395);
+             buffer.setFont(new Font("Helvetica",Font.BOLD, 130));
+             Color color = new Color((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255));
+             buffer.setColor(color);
+             buffer.drawString("CELL SURVIVAL", 170, 550);
              buffer.setColor(Color.WHITE);
              buffer.setFont(new Font("Helvetica",Font.PLAIN, 40));
-             buffer.drawString("A biologically inspired simulation where “cells\"compete", 170, 500);   
-             buffer.drawString("for resources and mutate in random ways every time they split.", 170, 550);
-             buffer.drawString("As they mutate, their behavior may change between cells.", 170, 600);
-             buffer.drawString("This can either help or harm them in the long run.", 170, 650);
-             buffer.drawString("Should a cell chase after the closest food, or go towards", 170, 700);
-             buffer.drawString("the one with least competition? How big should it get?", 170, 750);
-             buffer.drawString("How often should it split? As the simulation goes on, watch as", 170, 800);
-             buffer.drawString("survival of the fittest takes place right before your eyes!", 170, 850);
+             //body
+             buffer.drawString("A biologically inspired simulation where “cells\" compete", 170, 640);   
+             buffer.drawString("for resources and mutate in random ways every time they split.", 170, 690);
+             buffer.drawString("As they mutate, their behavior may change between cells.", 170, 740);
+             buffer.drawString("This can either help or harm them in the long run.", 170, 790);
+             buffer.drawString("Should a cell chase after the closest food, or go towards", 170, 840);
+             buffer.drawString("the one with least competition? How big should it get?", 170, 890);
+             buffer.drawString("How often should it split? As the simulation goes on, watch as", 170, 940);
+             buffer.drawString("survival of the fittest takes place right before your eyes!", 170, 990);
+             //credits
+             buffer.setColor(Color.GRAY);
+             buffer.setFont(new Font("Helvetica",Font.ITALIC, 30));            
+             buffer.drawString("Note: This software is provided AS IS and is not subject to warranty. This software is", 170, 1060);
+             buffer.drawString("run at the discretion of the user and is not responsible for any potential misuse.", 170, 1090);
+             buffer.drawString("© 2019", 170, 1120);
+             
+             //graphics # 1
+     		 int intx = 110;
+     		 int inty = 160;
+     		 int diam = 50;
+     		 int pointsx[] = new int [3];
+     		 int pointsy[] = new int [3];
+     		 //border for right triangle
+     		 buffer.setColor(Color.GRAY);
+     		 pointsx[0] = intx + (int)diam/2 ; pointsx[1] = pointsx[0] + 75; pointsx[2] = pointsx[0] + 75;
+     		 pointsy[0] = inty + 15; pointsy[1] = pointsy[0] + 75; pointsy[2] = pointsy[0] - 75;
+     	     buffer.fillPolygon(new Polygon(pointsx, pointsy, 3));	
+     	     //right triangle
+     		 buffer.setColor(Color.GREEN);
+     		 pointsx[0] = intx + (int)diam/2 +8; pointsx[1] = pointsx[0] + 60; pointsx[2] = pointsx[0] + 60;
+     		 pointsy[0] = inty + 15; pointsy[1] = pointsy[0] + 60; pointsy[2] = pointsy[0] - 60;
+     	     buffer.fillPolygon(new Polygon(pointsx, pointsy, 3));
+     	     //border for left triangle
+     		 buffer.setColor(Color.GRAY);
+     		 pointsx[0] = intx + (int)diam/2 ; pointsx[1] = pointsx[0] - 75; pointsx[2] = pointsx[0] - 75;
+     		 pointsy[0] = inty + 15; pointsy[1] = pointsy[0] + 75; pointsy[2] = pointsy[0] - 75;
+     	     buffer.fillPolygon(new Polygon(pointsx, pointsy, 3));	
+     	     //left triangle
+     		 buffer.setColor(Color.GREEN);
+     		 pointsx[0] = intx + (int)diam/2 -8; pointsx[1] = pointsx[0] - 60; pointsx[2] = pointsx[0] - 60;
+     		 pointsy[0] = inty + 15; pointsy[1] = pointsy[0] + 60; pointsy[2] = pointsy[0] - 60;
+     	     buffer.fillPolygon(new Polygon(pointsx, pointsy, 3));
+     	     //circle
+     	     buffer.setColor(Color.GRAY);
+     	     buffer.fillOval(intx,inty,diam, diam);
+     		 buffer.setColor(Color.WHITE);
+     	     buffer.fillOval(intx+4, inty+4, diam-8, diam-8);
+     	     
+             //graphics # 2
+     		 intx = 1300;
+     		 inty = 1250;
+     		 //border for right triangle
+     		 buffer.setColor(Color.GRAY);
+     		 pointsx[0] = intx + (int)diam/2 ; pointsx[1] = pointsx[0] + 75; pointsx[2] = pointsx[0] + 75;
+     		 pointsy[0] = inty + 15; pointsy[1] = pointsy[0] + 75; pointsy[2] = pointsy[0] - 75;
+     	     buffer.fillPolygon(new Polygon(pointsx, pointsy, 3));	
+     	     //right triangle
+     		 buffer.setColor(Color.MAGENTA);
+     		 pointsx[0] = intx + (int)diam/2 +8; pointsx[1] = pointsx[0] + 60; pointsx[2] = pointsx[0] + 60;
+     		 pointsy[0] = inty + 15; pointsy[1] = pointsy[0] + 60; pointsy[2] = pointsy[0] - 60;
+     	     buffer.fillPolygon(new Polygon(pointsx, pointsy, 3));
+     	     //border for left triangle
+     		 buffer.setColor(Color.GRAY);
+     		 pointsx[0] = intx + (int)diam/2 ; pointsx[1] = pointsx[0] - 75; pointsx[2] = pointsx[0] - 75;
+     		 pointsy[0] = inty + 15; pointsy[1] = pointsy[0] + 75; pointsy[2] = pointsy[0] - 75;
+     	     buffer.fillPolygon(new Polygon(pointsx, pointsy, 3));	
+     	     //left triangle
+     		 buffer.setColor(Color.MAGENTA);
+     		 pointsx[0] = intx + (int)diam/2 -8; pointsx[1] = pointsx[0] - 60; pointsx[2] = pointsx[0] - 60;
+     		 pointsy[0] = inty + 15; pointsy[1] = pointsy[0] + 60; pointsy[2] = pointsy[0] - 60;
+     	     buffer.fillPolygon(new Polygon(pointsx, pointsy, 3));
+     	     //circle
+     	     buffer.setColor(Color.GRAY);
+     	     buffer.fillOval(intx,inty,diam, diam);
+     		 buffer.setColor(Color.WHITE);
+     	     buffer.fillOval(intx+4, inty+4, diam-8, diam-8);   
              break;
            }
            

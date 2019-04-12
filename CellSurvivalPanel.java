@@ -202,14 +202,19 @@ public class CellSurvivalPanel extends JPanel
              }
              break;
            case 1://graph
-             buffer.setColor(Color.WHITE);
-             buffer.fillRect(0,0,N,N);
-             buffer.setColor(Color.BLACK);
-             buffer.drawLine(100,100,100,1000);
-             buffer.drawLine(100,1000,1400,1000);
-             buffer.drawString("population:  ",20,45);
-             
-             buffer.setColor(Color.GRAY);
+               buffer.setColor(Color.WHITE);
+               buffer.fillRect(0,0,N,N);
+               buffer.setColor(Color.BLACK);
+               buffer.drawLine(100,100,100,1000);
+               buffer.drawLine(100,1000,1400,1000);
+               //border
+               buffer.setColor(Color.BLACK);
+    	           buffer.fillRect(100, 100, 1300, 10);
+    	           buffer.fillRect(100, 1000, 1300, 10);
+    	           buffer.fillRect(94, 100, 7, 910);
+    	           buffer.fillRect(1400, 100, 7, 910);
+               buffer.drawString("population:  ",20,45);  
+               buffer.setColor(Color.GRAY);
              for(int i = 0; i < 900; i+=100)
              {
                
@@ -240,6 +245,13 @@ public class CellSurvivalPanel extends JPanel
              {
                buffer.drawLine(100+i*10,1000-greenPop.get(i)*10,100+(i+1)*10,1000-greenPop.get(i+1)*10);
              }
+               buffer.setColor(Color.BLACK);
+               buffer.setFont(new Font("Dialog",Font.BOLD, 40));
+               buffer.drawString("Current Cell Population: " + numCells, 100, 1100);
+               buffer.drawString("Current # of Food: " + numFood, 100, 1150);
+               buffer.drawString("# of cells with Curiosity as a primary trait: " + numRed, 100, 1200);
+               buffer.drawString("# of cells with Temperament as a primary trait:  " + numBlue, 100, 1250);
+               buffer.drawString("# of cells with Active as a primary trait:  " + numGreen, 100, 1300);
              break;
            case 2://about
                           buffer.setColor(Color.BLACK);

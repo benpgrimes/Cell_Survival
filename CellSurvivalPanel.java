@@ -72,11 +72,11 @@ public class CellSurvivalPanel extends JPanel
         {
           if(e.isMetaDown() == false)//checks if left click
           {
-            if(e.getX() < 100 && e.getY() <20)
+            if(e.getX() < 90 && e.getY() <45)
               screen = 0;
-            else if(e.getX() < 190 && e.getY() <20)
+            else if(e.getX() < 190 && e.getY() <45)
               screen = 1;
-            else if(e.getX() < 280 && e.getY() <20)
+            else if(e.getX() < 290 && e.getY() <45)
               screen = 2;
             System.out.println("X: "+e.getX()+" Y: "+e.getY());
           } 

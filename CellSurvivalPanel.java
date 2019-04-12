@@ -18,6 +18,12 @@ public class CellSurvivalPanel extends JPanel
   private int numFood = 0;
   private int numCells = 0;
   private ArrayList<Integer> population;
+  private ArrayList<Integer> redPop;
+  private ArrayList<Integer> bluePop;
+  private ArrayList<Integer> greenPop;
+  private int numRed;
+  private int numGreen;
+  private int numBlue;
   private int turnNum;
   
   public CellSurvivalPanel()
@@ -30,6 +36,12 @@ public class CellSurvivalPanel extends JPanel
          organismList = new LinkedList<Organism>();
          foodList = new LinkedList<Food>();
          population = new ArrayList<Integer>();
+         redPop = new ArrayList<Integer>();
+         greenPop = new ArrayList<Integer>();
+         bluePop = new ArrayList<Integer>();
+         numRed = 0;
+         numGreen = 0;
+         numBlue = 0;
          turnNum = 0;
          addMouseListener(new Mouse());
          
@@ -39,7 +51,7 @@ public class CellSurvivalPanel extends JPanel
           /**********************************
              *  creates new food
              ***********************************/
-             for(int i = 0; i < 8; i++)
+              for(int i = 0; i < 8; i++)
              {
                 Food food = new Food(Math.random()*1500,Math.random()*1460+20,20,500);
                 foodList.add(food);
@@ -66,22 +78,24 @@ public class CellSurvivalPanel extends JPanel
       // The mouse adapter is what recognizes where the 
       // mouse is being clicked
       //**************************************************
-  	private class Mouse extends MouseAdapter
-  	{
-  		public void mousePressed( MouseEvent e )
-  		{
-  			if(e.isMetaDown() == false)//checks if left click
-  			{
-  			if(e.getX() < 83 && e.getY() <25)
-  				screen = 0;
-  			else if(e.getX() < 169 && e.getY() <50)
-  				screen = 1;
-  			else if(e.getX() < 251 && e.getY() <50)
-  				screen = 2;
-  			System.out.println("X: "+e.getX()+" Y: "+e.getY());
-  			} 
-  		}
-  }
+      private class Mouse extends MouseAdapter
+      {
+        public void mousePressed( MouseEvent e )
+        {
+          if(e.isMetaDown() == false)//checks if left click
+          {
+            
+            if(e.getX() < 90 && e.getY() <50)
+              screen = 0;
+            else if(e.getX() < 190 && e.getY() <50)
+              screen = 1;
+            else if(e.getX() < 290 && e.getY() <50)
+              screen = 2;
+            System.out.println("X: "+e.getX()+" Y: "+e.getY());
+          } 
+          
+        }
+      }
       //**************************************************
       //  the action listener is the section where things
       //  get drawn to the screen.  i.e. every thime the
@@ -95,8 +109,7 @@ public class CellSurvivalPanel extends JPanel
            {
            case 0://board
             
-             
-             //Draws Background
+             //draws background
              buffer.setColor(Color.WHITE);
              buffer.fillRect(0,0,N,N);
              
@@ -109,48 +122,82 @@ public class CellSurvivalPanel extends JPanel
              //Iterates through Organism list
              for(int i = 0; i < numCells; i++)
              {
-               organismList.get(i).move();
-               int temp = organismList.get(i).choose();
+               Organism tempOrg = organismList.get(i);
+               tempOrg.move();
+               int temp = tempOrg.choose();
                if(temp == 1)
-                 organismList.get(i).grow();
+                 tempOrg.grow();
                else if(temp == 2)
-                 organismList.get(i).examine(organismList, foodList, numCells, numFood);
-               else if(temp == 3)
+                 tempOrg.examine(organismList, foodList, numCells, numFood);
+               else if(temp == 3)//-------SPLIT-----
                {
                  Organism child;
-                 child = organismList.get(i).split();
+                 child = tempOrg.split();
+                 //curisoity red
+                 //temperament blue
+                 //active level green
+                 if(child.getCuriosity() >= child.getTemperament()&&child.getCuriosity() >= child.getActive())
+                 { //RED
+                   numRed++;
+                 }
+                 else if(child.getTemperament() >= child.getActive() &&child.getTemperament() >= child.getCuriosity())
+                 {//BLUE
+                   numBlue++;
+                 }
+                 else
+                 {//GREEN
+                   numGreen++;
+                 }
                  organismList.add(child);
                  numCells++;
                }
                else if(temp == 4)
-                 organismList.get(i).move();
+                 tempOrg.move();
                else if(temp == 5)
-                 organismList.get(i).idle();
+                 tempOrg.idle();
               
                //Checks for collision
                if(i>0)
                {
                  for(int j = 0; j < numFood; j++)
                  {
-                   if(organismList.get(i).collision(foodList.get(j).getX(),foodList.get(j).getY(),
+                   if(tempOrg.collision(foodList.get(j).getX(),foodList.get(j).getY(),
                                                     foodList.get(j).getEnergy()))
                    {
                      foodList.get(j).setX(Math.random()*1500);
                      foodList.get(j).setY(Math.random()*1460+20);
                    }
                  }
-                 organismList.get(i).draw(buffer);
+                 tempOrg.draw(buffer);
                }
-               if(organismList.get(i).getEnergy() <= 0)
+               if(tempOrg.getEnergy() <= 0)//REMOVING DEAD CELLS
                {
+                 if(tempOrg.getCuriosity() >= tempOrg.getTemperament()&&tempOrg.getCuriosity() >= tempOrg.getActive())
+                 { //RED
+                   numRed--;
+                 }
+                 else if(tempOrg.getTemperament() >= tempOrg.getActive() &&tempOrg.getTemperament() >= tempOrg.getCuriosity())
+                 {//BLUE
+                   numBlue--;
+                 }
+                 else
+                 {//GREEN
+                   numGreen--;
+                 }
                  organismList.remove(i);
                  i--;
                  numCells--;
                }
-               if(turnNum %1000 == 0)
+   
+               if(turnNum %1000 == 0)//Adds to graph 
                {
                  population.add(numCells);
+                 redPop.add(numRed);
+                 greenPop.add(numGreen);
+                 bluePop.add(numBlue);
                }
+               
+               
                turnNum++;
              }
              break;
@@ -163,7 +210,7 @@ public class CellSurvivalPanel extends JPanel
              buffer.drawString("population:  ",20,45);
              
              buffer.setColor(Color.GRAY);
-             for(int i = 0; i < 900; i+=80)
+             for(int i = 0; i < 900; i+=100)
              {
                
                buffer.drawLine(100,1000-i,1400,1000-i);
@@ -171,9 +218,27 @@ public class CellSurvivalPanel extends JPanel
          
              
              buffer.setColor(Color.BLACK);
-             for(int i = 0; i < population.size()-1;i++)
+             for(int i = 0; i < population.size()-1;i++)//TOTAL POPULATION
              {
-               buffer.drawLine(100+i*10,1000-population.get(i)*8,100+(i+1)*10,1000-population.get(i+1)*8);
+               buffer.drawLine(100+i*10,1000-population.get(i)*10,100+(i+1)*10,1000-population.get(i+1)*10);
+             }
+           
+             buffer.setColor(Color.RED);//RED POPULATION
+             for(int i = 0; i < redPop.size()-1;i++)
+             {
+               buffer.drawLine(100+i*10,1000-redPop.get(i)*10,100+(i+1)*10,1000-redPop.get(i+1)*10);
+             }
+             
+             buffer.setColor(Color.BLUE);//BLUE POPULATION
+             for(int i = 0; i < bluePop.size()-1;i++)
+             {
+               buffer.drawLine(100+i*10,1000-bluePop.get(i)*10,100+(i+1)*10,1000-bluePop.get(i+1)*10);
+             }
+             
+             buffer.setColor(Color.GREEN);//GREEN POPULATION
+             for(int i = 0; i < greenPop.size()-1;i++)
+             {
+               buffer.drawLine(100+i*10,1000-greenPop.get(i)*10,100+(i+1)*10,1000-greenPop.get(i+1)*10);
              }
              break;
            case 2://about
@@ -218,7 +283,7 @@ public class CellSurvivalPanel extends JPanel
            buffer.setColor(Color.BLACK);
            buffer.setFont(new Font("Monospaced", Font.BOLD, 24));
            buffer.drawString("ABOUT  ",210,35);
-
+           
            repaint();
       }
    }

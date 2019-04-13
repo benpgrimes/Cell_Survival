@@ -21,7 +21,7 @@ public class Organism extends Cell {
 	// x^2 based on last use
 	private int curiosity;
 
-	// minimum for ting
+	// minimum energy for splitting
 	// x
 	private int maternalMin;
 
@@ -58,6 +58,8 @@ public class Organism extends Cell {
 	// stores the next choice the cell will execute
 	private int choice = -1;
 	private int prevchoice = -1;
+	private int prevdirection = -1;
+	private int movectr = 0;
 
 	/*************************
 	 * Constructor for Organism
@@ -173,7 +175,7 @@ public class Organism extends Cell {
 				multiplier = growthInc;
 			}
 			//temp = (int) Math.abs((Math.atan(this.energy) / this.energy)*100*multiplier);// THIS HAD TO BE MADE AN INT
-			temp = (int) (growthLim - this.diam)/5 + (this.energy/10) * multiplier;
+			temp = (int) (growthLim - this.diam)/5 + (this.energy/100) * multiplier;
 			if(temp < 0) {
 				temp = 0;
 			}
@@ -182,10 +184,16 @@ public class Organism extends Cell {
 			ctr++;
 			multiplier = 0;
 
-			if (this.choice != 2) {
+			if (this.choice != 2 && this.prevchoice != 2) {
 				multiplier++;
 			}
-			if (this.prevchoice != 2) {
+			if(this.prevdirection == -1) {
+				multiplier = multiplier + 5;
+			}
+			if(this.closestFood[0] == null) {
+				multiplier = multiplier + 3;
+			}
+			if(this.closestFood[2] == null) {
 				multiplier++;
 			}
 			temp = Math.abs(multiplier * multiplier * curious);
@@ -208,13 +216,13 @@ public class Organism extends Cell {
 			ctr++;
 
 			long combined = total;
-			int mindist = 999999999;// I DECREASED THIS NUMBER BECAUSE IT WAS TO LARGE TO BE AN INT
-			if (this.closestFood[2] != null) {
+			int mindist = 0x7fffffff;// I DECREASED THIS NUMBER BECAUSE IT WAS TO LARGE TO BE AN INT
+			if (this.closestOrganism[2] != null) {
 				total += combined;
 				for (int i = 0; i < 3; i++) {
-					Cell tempFood = closestFood[i];
-					int tempx = (int) Math.abs(tempFood.x - this.x);// these were also made ints
-					int tempy = (int) Math.abs(tempFood.y - this.y);// ''
+					Cell tempOrganism = closestOrganism[i];
+					int tempx = (int) Math.abs(tempOrganism.x - this.x);// these were also made ints
+					int tempy = (int) Math.abs(tempOrganism.y - this.y);// ''
 					int tempdist = (int) Math.sqrt((tempx * tempx) + (tempy * tempy));// ''
 					if (tempdist < mindist) {
 						mindist = tempdist;
@@ -259,19 +267,67 @@ public class Organism extends Cell {
 	 *
 	 *
 	 *********************************************/
-	public int chooseDirection() {
-		double distanceToFood0 = -1;
-		double distanceToFood1 = -1;
-		double distanceToFood2 = -1;
-
-		if (this.closestFood[0] == null) {
-			Cell tempFood = closestFood[0];
-			int tempx = (int) Math.abs(tempFood.x - this.x);// these were also made ints
-			int tempy = (int) Math.abs(tempFood.y - this.y);// ''
-			int tempdist = (int) Math.sqrt((tempx * tempx) + (tempy * tempy));// ''
-
+	public int chooseDirection() {	
+		int result = -1;
+		if(this.prevdirection == -1 || this.movectr > 15) {
+			double[] distanceToFood = new double[3];
+			distanceToFood[0] = -1;
+			distanceToFood[1] = -1;
+			distanceToFood[2] = -1;
+			int i = 0;
+			int j = 0;
+			while(i < 3) {
+				if(this.closestFood[i] != null) {
+					Cell tempFood = closestFood[i];
+					double tempx = (tempFood.x - this.x);// these were also made ints
+					double tempy = (tempFood.y - this.y);// ''
+					double tempdist = Math.sqrt((tempx * tempx) + (tempy * tempy));// ''
+					while( j < 3 && this.closestOrganism[j] != null) {
+						Cell tempOrganism = closestOrganism[j];
+						double temp2x = (tempOrganism.x - this.x);
+						double temp2y = (tempOrganism.x - this.x);
+						if(((tempx < 0 && temp2x < 0) && (tempy < 0 && temp2y < 0)) || 
+								((tempx >= 0 && temp2x >= 0) && (tempy >= 0 && temp2y >= 0))){
+							temp2x = tempOrganism.x - tempFood.x;
+							temp2y = tempOrganism.y - tempFood.y;
+							double tempdist2 = Math.sqrt((temp2x*temp2x) + (temp2y*temp2y));
+							tempdist = tempdist + ((tempdist-tempdist2)* (this.temperament/ 10.5));
+						}
+						if(distanceToFood[i] == -1 || distanceToFood[i] > tempdist) {
+							distanceToFood[i] = tempdist;
+						}
+						j++;
+					}
+					distanceToFood[i] = tempdist;
+				}
+				i++;
+			}
+			if(distanceToFood[0] >= 0) {
+				double mindist = distanceToFood[0];
+				j = 0;
+				for(i = 1; i < 3; i++) {
+					if(distanceToFood[i] < mindist && distanceToFood[i] >= 0) {
+						mindist = distanceToFood[i];
+						j = i;
+					}
+				}
+			
+				double tempx = (closestFood[j].x - this.x);// these were also made ints
+				double tempy = (closestFood[j].y - this.y);
+				double tan = Math.atan2(tempy, tempx);
+				if(tan < 0) {
+					tan = tan+(Math.PI*2);
+					//tan = Math.PI-tan;
+				}
+				result = (int) ((tan*180)/Math.PI);
+			}
+			movectr = 0;
+		}else {
+			result = this.prevdirection;
+			this.movectr++;
 		}
-		return 0;
+		this.prevdirection = result;
+		return result;
 	}
 		
 	public void grow() {
@@ -290,7 +346,7 @@ public class Organism extends Cell {
 	 *
 	 *********************************************/
 	public void examine(LinkedList Organisms, LinkedList foodList, int numOrganisms, int numFood) {
-	    int mindist = 999999;
+	    int mindist = 0x7fffffff;
 	    int index1 = -1;
 	    int index2 = -1;
 	    for(int i = 0; i < 3; i++) {
@@ -298,8 +354,8 @@ public class Organism extends Cell {
 		    for (int j = 0; j < numFood; j++) {
 		    	if(j != index1 && j != index2) {
 					Cell tempFood = (Cell) foodList.get(j);
-					int tempx = (int) Math.abs(tempFood.x - this.x);// these were also made ints
-					int tempy = (int) Math.abs(tempFood.y - this.y);// ''
+					int tempx = (int) (tempFood.x - this.x);// these were also made ints
+					int tempy = (int) (tempFood.y - this.y);// ''
 					int tempdist = (int) Math.sqrt((tempx * tempx) + (tempy * tempy));// ''
 					if (tempdist < mindist) {
 						mindist = tempdist;
@@ -309,16 +365,16 @@ public class Organism extends Cell {
 		    	}
 		    }
 		    
-	    	this.closestFood[i] = closeFood;
-	    	mindist = 999999;
+	    	this.closestFood[i] = new Food(closeFood.getX(), closeFood.getY(), closeFood.getDiam(), closeFood.getEnergy());
+	    	mindist = 0x7fffffff;
 	    }
 	    for(int i = 0; i < 3; i++) {
 		    Cell closeOrganism = null;
 			for (int j = 0; j < numOrganisms; j++) {
 			    if(j != index1 || j != index2) {
 					Cell tempOrganism = (Cell) Organisms.get(j);
-					int tempx = (int) Math.abs(tempOrganism.x - this.x);// these were also made ints
-					int tempy = (int) Math.abs(tempOrganism.y - this.y);// ''
+					int tempx = (int) (tempOrganism.x - this.x);// these were also made ints
+					int tempy = (int) (tempOrganism.y - this.y);// ''
 					int tempdist = (int) Math.sqrt((tempx * tempx) + (tempy * tempy));// ''
 					if (tempdist < mindist) {
 						mindist = tempdist;
@@ -327,9 +383,11 @@ public class Organism extends Cell {
 					}
 			    }
 			}
-		    this.closestOrganism[i] = closeOrganism;
+		    this.closestOrganism[i] = new Organism(closeOrganism.getX(), closeOrganism.getY(), closeOrganism.getDiam(), 
+		    		closeOrganism.getEnergy(), closeOrganism.getColor(), closeOrganism.garbageTendencies());
 		    mindist = 999999;
 	    }
+	    this.prevdirection = -1;
 		reduceEnergy(2);		//CHECK
 	}
 	
@@ -368,6 +426,116 @@ public class Organism extends Cell {
 	 *
 	 *********************************************/
 	public void move() {
+		int angle = chooseDirection();
+		if(angle != -1) {
+		
+			int count = 0;
+			int xmul = 1;
+			int ymul = 1;
+			int flip = 1;
+			while(angle > 90) {
+				flip = flip*-1;
+				count++;
+				if(count == 1 || count == 3) {
+					xmul = xmul*-1;
+				}else {
+					ymul = ymul*-1;
+				}
+				angle -= 90;
+			}
+			/*while(angle < 0) {
+				flip = flip*-1;
+				count++;
+				if(count == 2 || count == 4) {
+					xmul = xmul*-1;
+				}else {
+					ymul = ymul*-1;
+				}
+				angle += 90;
+			}*/
+			if(flip == -1) {
+				if(angle >= 0 && angle <= 15) {
+					this.y += 10 * ymul;
+				}else if(angle > 15 && angle < 37) {
+					this.y += 8 * ymul;
+					this.x += 5 * xmul;
+				}else if(angle >= 37 && angle <= 53) {
+					this.y += 7 * ymul;
+					this.x += 7 * xmul;
+				}else if(angle > 53 && angle < 75) {
+					this.y += 5 * ymul;
+					this.x += 8 * xmul;
+				}else if(angle >= 75 && angle <= 90) {
+					this.x += 10 * xmul;
+				}
+			}else {
+				if(angle >= 0 && angle <= 15) {
+					this.x += 10 * xmul;
+				}else if(angle > 15 && angle < 37) {
+					this.x += 8 * xmul;
+					this.y += 5 * ymul;
+				}else if(angle >= 37 && angle <= 53) {
+					this.x += 7 * xmul;
+					this.y += 7 * ymul;
+				}else if(angle > 53 && angle < 75) {
+					this.x += 5 * xmul;
+					this.y += 8 * ymul;
+				}else if(angle >= 75 && angle <= 90) {
+					this.y += 10 * ymul;
+				}
+			}
+			reduceEnergy(2);
+		
+			/*if((angle >= 0 && angle <= 15) || (angle <= 360 && angle >= 345)) {
+				this.x += 10;
+			}else if(angle > 15 && angle < 37) {
+				this.x += 8;
+				this.y += 5;
+			}else if(angle >= 37 && angle <= 53) {
+				this.x += 7;
+				this.y += 7;
+			}else if(angle > 53 && angle < 75) {
+				this.x += 5;
+				this.y += 8;
+			}else if(angle >= 75 && angle <= 105) {
+				this.y += 10;
+			}else if(angle > 105 && angle < 127) {
+				this.x -= 5;
+				this.y += 8;
+			}else if(angle >= 127 && angle <= 143) {
+				this.x -= 7;
+				this.y += 7;
+			}else if(angle > 143 && angle < 165) {
+				this.x -= 8;
+				this.y += 5;
+			}else if(angle >= 165 && angle <= 195) {
+				this.x -= 10;
+			}else if(angle > 195 && angle < 217) {
+				this.x -= 8;
+				this.y -= 5;
+			}else if(angle >= 217 && angle <= 233) {
+				this.x -= 7;
+				this.y -= 7;
+			}else if(angle > 233 && angle < 255) {
+				this.x -= 5;
+				this.y -= 8;
+			}else if(angle >= 255 && angle <= 285) {
+				this.y -= 10;
+			}else if(angle > 285 && angle < 307) {
+				this.x += 5;
+				this.y -= 8;
+			}else if(angle >= 307 && angle <= 323) {
+				this.x += 7;
+				this.y -= 7;
+			}else if(angle > 323 && angle < 345) {
+				this.x += 8;
+				this.y -= 5;
+			}
+			*/
+		}else {
+			idle();
+		}
+		/*
 		if(closestFood[0] != null) {
 			if (energy > 0) {
 		
@@ -391,6 +559,7 @@ public class Organism extends Cell {
 				}
 			}
 		}
+		*/
 	}
 	
 	public void idle(){
@@ -426,8 +595,17 @@ public class Organism extends Cell {
 	 *
 	 *********************************************/
 	public boolean collision(double foodX, double foodY, int foodEnergy) {
-		if (Math.abs(foodX - x) <= (diam/2) && Math.abs(foodY - y) <= (diam/2)) {
+		if (Math.abs(foodX - x) < (diam/2) && Math.abs(foodY - y) < (diam/2)) {
 			energy += foodEnergy;
+			this.prevdirection = -1;
+			for(int i = 0; i < 3; i++) {
+				Cell tempfood = this.closestFood[i];
+				if(tempfood != null) {
+					if(tempfood.x == foodX && tempfood.y == foodY) {
+						this.closestFood[i] = null;
+					}
+				}
+			}
 			return true;
 		}
 		return false;

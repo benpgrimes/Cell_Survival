@@ -53,7 +53,7 @@ public class CellSurvivalPanel extends JPanel
              ***********************************/
               for(int i = 0; i < 8; i++)
              {
-                Food food = new Food(Math.random()*1500,Math.random()*1460+20,20,500);
+                Food food = new Food(Math.random()*1500,Math.random()*1460+20,20,1000);
                 foodList.add(food);
                 numFood++;
               }
@@ -68,9 +68,22 @@ public class CellSurvivalPanel extends JPanel
                {
                  tendancies[j] = 100;
                }
+               
                Organism organism = new Organism(Math.random()*1500,Math.random()*1500,30.0,10000,Color.BLUE,tendancies);
                organismList.add(organism);
                numCells++;
+               if(organism.getGrowthInclination() >= organism.getMaternalInclination()&&organism.getGrowthInclination() >= organism.getActive())
+                 { //RED
+                   numRed++;
+                 }
+                 else if(organism.getMaternalInclination() >= organism.getActive() &&organism.getMaternalInclination() >= organism.getGrowthInclination())
+                 {//BLUE
+                   numGreen++;
+                 }
+                 else if(organism.getActive() >= organism.getMaternalInclination() &&organism.getActive() >= organism.getGrowthInclination())
+                 {//GREEN
+                   numBlue++;
+                 }
              }
                
       }
@@ -127,7 +140,7 @@ public class CellSurvivalPanel extends JPanel
                int temp = tempOrg.choose();
                if(temp == 1)
                  tempOrg.grow();
-               else if(temp == 2)
+               else if(temp == 2&&foodList!=null&&numFood>0)
                  tempOrg.examine(organismList, foodList, numCells, numFood);
                else if(temp == 3)//-------SPLIT-----
                {
@@ -136,17 +149,17 @@ public class CellSurvivalPanel extends JPanel
                  //curisoity red
                  //temperament blue
                  //active level green
-                 if(child.getCuriosity() >= child.getTemperament()&&child.getCuriosity() >= child.getActive())
+                 if(child.getGrowthInclination() >= child.getMaternalInclination()&&child.getGrowthInclination() >= child.getActive())
                  { //RED
                    numRed++;
                  }
-                 else if(child.getTemperament() >= child.getActive() &&child.getTemperament() >= child.getCuriosity())
+                 else if(child.getMaternalInclination() >= child.getActive() &&child.getMaternalInclination() >= child.getGrowthInclination())
                  {//BLUE
-                   numBlue++;
-                 }
-                 else
-                 {//GREEN
                    numGreen++;
+                 }
+                 else if(child.getActive() >= child.getMaternalInclination() &&child.getActive() >= child.getGrowthInclination())
+                 {//GREEN
+                   numBlue++;
                  }
                  organismList.add(child);
                  numCells++;
@@ -164,26 +177,32 @@ public class CellSurvivalPanel extends JPanel
                    if(tempOrg.collision(foodList.get(j).getX(),foodList.get(j).getY(),
                                                     foodList.get(j).getEnergy()))
                    {
-                     foodList.get(j).setX(Math.random()*1500);
-                     foodList.get(j).setY(Math.random()*1460+20);
+                     foodList.remove(j);
+                     j--;
+                     numFood--;
+                     //foodList.get(j).setX(Math.random()*1500);
+                     //foodList.get(j).setY(Math.random()*1460+20);
                    }
                  }
                  tempOrg.draw(buffer);
                }
                if(tempOrg.getEnergy() <= 0)//REMOVING DEAD CELLS
                {
-                 if(tempOrg.getCuriosity() >= tempOrg.getTemperament()&&tempOrg.getCuriosity() >= tempOrg.getActive())
+                  if(tempOrg.getGrowthInclination() >= tempOrg.getMaternalInclination()&&tempOrg.getGrowthInclination() >= tempOrg.getActive())
                  { //RED
                    numRed--;
                  }
-                 else if(tempOrg.getTemperament() >= tempOrg.getActive() &&tempOrg.getTemperament() >= tempOrg.getCuriosity())
+                 else if(tempOrg.getMaternalInclination() >= tempOrg.getActive() &&tempOrg.getMaternalInclination() >= tempOrg.getGrowthInclination())
                  {//BLUE
-                   numBlue--;
-                 }
-                 else
-                 {//GREEN
                    numGreen--;
                  }
+                 else if(tempOrg.getActive() >= tempOrg.getMaternalInclination() &&tempOrg.getActive() >= tempOrg.getGrowthInclination())
+                 {//GREEN
+                   numBlue--;
+                 }
+                 Food food = new Food(tempOrg.getX(),tempOrg.getY(),20,500);
+                 foodList.add(food);
+                 numFood++;
                  organismList.remove(i);
                  i--;
                  numCells--;
@@ -196,26 +215,34 @@ public class CellSurvivalPanel extends JPanel
                  greenPop.add(numGreen);
                  bluePop.add(numBlue);
                }
+               if(turnNum %350 == 0)//Adds food to board
+               {
+                Food food = new Food(Math.random()*1500,Math.random()*1460+20,20,1000);
+                foodList.add(food);
+                numFood++;
+               }
                
                
                turnNum++;
              }
              break;
            case 1://graph
-               buffer.setColor(Color.WHITE);
-               buffer.fillRect(0,0,N,N);
-               buffer.setColor(Color.BLACK);
-               buffer.drawLine(100,100,100,1000);
-               buffer.drawLine(100,1000,1400,1000);
-               //border
-               buffer.setColor(Color.BLACK);
-    	           buffer.fillRect(100, 100, 1300, 10);
-    	           buffer.fillRect(100, 1000, 1300, 10);
-    	           buffer.fillRect(94, 100, 7, 910);
-    	           buffer.fillRect(1400, 100, 7, 910);
-               buffer.drawString("population:  ",20,45);  
-               buffer.setColor(Color.GRAY);
-             for(int i = 0; i < 900; i+=100)
+             buffer.setColor(Color.WHITE);
+             buffer.fillRect(0,0,N,N);
+             buffer.setColor(Color.BLACK);
+             buffer.drawLine(100,100,100,1000);
+             buffer.drawLine(100,1000,1400,1000);
+             
+             //border
+             buffer.setColor(Color.BLACK);
+             buffer.fillRect(100, 100, 1300, 10);
+             buffer.fillRect(100, 1000, 1300, 10);
+             buffer.fillRect(94, 100, 7, 910);
+             buffer.fillRect(1400, 100, 7, 910);
+             buffer.drawString("population:  ",20,45); 
+             
+             buffer.setColor(Color.GRAY);
+             for(int i = 0; i < 900; i+=110)
              {
                
                buffer.drawLine(100,1000-i,1400,1000-i);
@@ -225,125 +252,57 @@ public class CellSurvivalPanel extends JPanel
              buffer.setColor(Color.BLACK);
              for(int i = 0; i < population.size()-1;i++)//TOTAL POPULATION
              {
-               buffer.drawLine(100+i*10,1000-population.get(i)*10,100+(i+1)*10,1000-population.get(i+1)*10);
+               buffer.drawLine(100+i*10,1000-population.get(i)*11,100+(i+1)*10,1000-population.get(i+1)*11);
              }
            
              buffer.setColor(Color.RED);//RED POPULATION
              for(int i = 0; i < redPop.size()-1;i++)
              {
-               buffer.drawLine(100+i*10,1000-redPop.get(i)*10,100+(i+1)*10,1000-redPop.get(i+1)*10);
+               buffer.drawLine(100+i*10,1000-redPop.get(i)*11,100+(i+1)*10,1000-redPop.get(i+1)*11);
              }
              
              buffer.setColor(Color.BLUE);//BLUE POPULATION
              for(int i = 0; i < bluePop.size()-1;i++)
              {
-               buffer.drawLine(100+i*10,1000-bluePop.get(i)*10,100+(i+1)*10,1000-bluePop.get(i+1)*10);
+               buffer.drawLine(100+i*10,1000-bluePop.get(i)*11,100+(i+1)*10,1000-bluePop.get(i+1)*11);
              }
              
              buffer.setColor(Color.GREEN);//GREEN POPULATION
              for(int i = 0; i < greenPop.size()-1;i++)
              {
-               buffer.drawLine(100+i*10,1000-greenPop.get(i)*10,100+(i+1)*10,1000-greenPop.get(i+1)*10);
+               buffer.drawLine(100+i*10,1000-greenPop.get(i)*11,100+(i+1)*10,1000-greenPop.get(i+1)*11);
              }
+             buffer.setColor(Color.BLACK);
+             buffer.setFont(new Font("Dialog",Font.BOLD, 40));
+             buffer.drawString("Current Cell Population: " + numCells, 100, 1100);
+             buffer.drawString("Current # of Food: " + numFood, 100, 1150);
+             buffer.drawString("# of cells with curiosity as a primary trait: " + numRed, 100, 1200);
+             buffer.drawString("# of cells with temperament as a primary trait:  " + numBlue, 100, 1250);
+             buffer.drawString("# of cells with Active as a primary trait:  " + numGreen, 100, 1300);
+             break;
+             case 2://about
                buffer.setColor(Color.BLACK);
-               buffer.setFont(new Font("Dialog",Font.BOLD, 40));
-               buffer.drawString("Current Cell Population: " + numCells, 100, 1100);
-               buffer.drawString("Current # of Food: " + numFood, 100, 1150);
-               buffer.drawString("# of cells with Curiosity as a primary trait: " + numRed, 100, 1200);
-               buffer.drawString("# of cells with Temperament as a primary trait:  " + numBlue, 100, 1250);
-               buffer.drawString("# of cells with Active as a primary trait:  " + numGreen, 100, 1300);
-             break;
-           case 2://about
-                          buffer.setColor(Color.BLACK);
-             buffer.fillRect(0,0,N,N);
-             buffer.setColor(Color.DARK_GRAY);
-             buffer.fillRect(170,423,1050,150);
-             buffer.setColor(Color.WHITE);
-             buffer.setFont(new Font("Helvetica",Font.BOLD, 60));
-             buffer.drawString("Welcome to...", 170, 395);
-             buffer.setFont(new Font("Helvetica",Font.BOLD, 130));
-             Color color = new Color((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255));
-             buffer.setColor(color);
-             buffer.drawString("CELL SURVIVAL", 170, 550);
-             buffer.setColor(Color.WHITE);
-             buffer.setFont(new Font("Helvetica",Font.PLAIN, 40));
-             //body
-             buffer.drawString("A biologically inspired simulation where “cells\" compete", 170, 640);   
-             buffer.drawString("for resources and mutate in random ways every time they split.", 170, 690);
-             buffer.drawString("As they mutate, their behavior may change between cells.", 170, 740);
-             buffer.drawString("This can either help or harm them in the long run.", 170, 790);
-             buffer.drawString("Should a cell chase after the closest food, or go towards", 170, 840);
-             buffer.drawString("the one with least competition? How big should it get?", 170, 890);
-             buffer.drawString("How often should it split? As the simulation goes on, watch as", 170, 940);
-             buffer.drawString("survival of the fittest takes place right before your eyes!", 170, 990);
-             //credits
-             buffer.setColor(Color.GRAY);
-             buffer.setFont(new Font("Helvetica",Font.ITALIC, 30));            
-             buffer.drawString("Note: This software is provided AS IS and is not subject to warranty. This software is", 170, 1060);
-             buffer.drawString("run at the discretion of the user and is not responsible for any potential misuse.", 170, 1090);
-             buffer.drawString("© 2019", 170, 1120);
-             
-             //graphics # 1
-     		 int intx = 110;
-     		 int inty = 160;
-     		 int diam = 50;
-     		 int pointsx[] = new int [3];
-     		 int pointsy[] = new int [3];
-     		 //border for right triangle
-     		 buffer.setColor(Color.GRAY);
-     		 pointsx[0] = intx + (int)diam/2 ; pointsx[1] = pointsx[0] + 75; pointsx[2] = pointsx[0] + 75;
-     		 pointsy[0] = inty + 15; pointsy[1] = pointsy[0] + 75; pointsy[2] = pointsy[0] - 75;
-     	     buffer.fillPolygon(new Polygon(pointsx, pointsy, 3));	
-     	     //right triangle
-     		 buffer.setColor(Color.GREEN);
-     		 pointsx[0] = intx + (int)diam/2 +8; pointsx[1] = pointsx[0] + 60; pointsx[2] = pointsx[0] + 60;
-     		 pointsy[0] = inty + 15; pointsy[1] = pointsy[0] + 60; pointsy[2] = pointsy[0] - 60;
-     	     buffer.fillPolygon(new Polygon(pointsx, pointsy, 3));
-     	     //border for left triangle
-     		 buffer.setColor(Color.GRAY);
-     		 pointsx[0] = intx + (int)diam/2 ; pointsx[1] = pointsx[0] - 75; pointsx[2] = pointsx[0] - 75;
-     		 pointsy[0] = inty + 15; pointsy[1] = pointsy[0] + 75; pointsy[2] = pointsy[0] - 75;
-     	     buffer.fillPolygon(new Polygon(pointsx, pointsy, 3));	
-     	     //left triangle
-     		 buffer.setColor(Color.GREEN);
-     		 pointsx[0] = intx + (int)diam/2 -8; pointsx[1] = pointsx[0] - 60; pointsx[2] = pointsx[0] - 60;
-     		 pointsy[0] = inty + 15; pointsy[1] = pointsy[0] + 60; pointsy[2] = pointsy[0] - 60;
-     	     buffer.fillPolygon(new Polygon(pointsx, pointsy, 3));
-     	     //circle
-     	     buffer.setColor(Color.GRAY);
-     	     buffer.fillOval(intx,inty,diam, diam);
-     		 buffer.setColor(Color.WHITE);
-     	     buffer.fillOval(intx+4, inty+4, diam-8, diam-8);
-     	     
-             //graphics # 2
-     		 intx = 1300;
-     		 inty = 1250;
-     		 //border for right triangle
-     		 buffer.setColor(Color.GRAY);
-     		 pointsx[0] = intx + (int)diam/2 ; pointsx[1] = pointsx[0] + 75; pointsx[2] = pointsx[0] + 75;
-     		 pointsy[0] = inty + 15; pointsy[1] = pointsy[0] + 75; pointsy[2] = pointsy[0] - 75;
-     	     buffer.fillPolygon(new Polygon(pointsx, pointsy, 3));	
-     	     //right triangle
-     		 buffer.setColor(Color.MAGENTA);
-     		 pointsx[0] = intx + (int)diam/2 +8; pointsx[1] = pointsx[0] + 60; pointsx[2] = pointsx[0] + 60;
-     		 pointsy[0] = inty + 15; pointsy[1] = pointsy[0] + 60; pointsy[2] = pointsy[0] - 60;
-     	     buffer.fillPolygon(new Polygon(pointsx, pointsy, 3));
-     	     //border for left triangle
-     		 buffer.setColor(Color.GRAY);
-     		 pointsx[0] = intx + (int)diam/2 ; pointsx[1] = pointsx[0] - 75; pointsx[2] = pointsx[0] - 75;
-     		 pointsy[0] = inty + 15; pointsy[1] = pointsy[0] + 75; pointsy[2] = pointsy[0] - 75;
-     	     buffer.fillPolygon(new Polygon(pointsx, pointsy, 3));	
-     	     //left triangle
-     		 buffer.setColor(Color.MAGENTA);
-     		 pointsx[0] = intx + (int)diam/2 -8; pointsx[1] = pointsx[0] - 60; pointsx[2] = pointsx[0] - 60;
-     		 pointsy[0] = inty + 15; pointsy[1] = pointsy[0] + 60; pointsy[2] = pointsy[0] - 60;
-     	     buffer.fillPolygon(new Polygon(pointsx, pointsy, 3));
-     	     //circle
-     	     buffer.setColor(Color.GRAY);
-     	     buffer.fillOval(intx,inty,diam, diam);
-     		 buffer.setColor(Color.WHITE);
-     	     buffer.fillOval(intx+4, inty+4, diam-8, diam-8);   
-             break;
+               buffer.fillRect(0,0,N,N);
+               buffer.setColor(Color.LIGHT_GRAY);
+               buffer.fillRect(170,313,800,100);
+               buffer.setColor(Color.GRAY);
+               buffer.drawString("CoolDevelopers welcomes you to...", 170, 300);
+               buffer.setFont(new Font("Helvetica",Font.BOLD, 100));
+               buffer.setColor(Color.BLACK);
+               Color color = new Color((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255));
+               buffer.setColor(color);
+               buffer.drawString("CELL SURVIVAL", 170, 400);
+               buffer.setColor(Color.WHITE);
+               buffer.setFont(new Font("Helvetica",Font.PLAIN, 40));
+               buffer.drawString("A biologically inspired simulation where “cells\"compete", 170, 500);   
+               buffer.drawString("for resources and mutate in random ways every time they split.", 170, 550);
+               buffer.drawString("As they mutate, their behavior may change between cells.", 170, 600);
+               buffer.drawString("This can either help or harm them in the long run.", 170, 650);
+               buffer.drawString("Should a cell chase after the closest food, or go towards", 170, 700);
+               buffer.drawString("the one with least competition? How big should it get?", 170, 750);
+               buffer.drawString("How often should it split? As the simulation goes on, watch as", 170, 800);
+               buffer.drawString("survival of the fittest takes place right before your eyes!", 170, 850);
+               break;
            }
            
            //THIS IS CREATING THE TAB LABLES  

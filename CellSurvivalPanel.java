@@ -12,7 +12,7 @@ public class CellSurvivalPanel extends JPanel
   private Graphics buffer;
   private Timer t;
   private static final int N = 1500;
-  private static int screen = 0;
+  private static int screen = 4;
   private LinkedList<Organism> organismList;
   private LinkedList<Food> foodList;
   private int numFood = 0;
@@ -25,6 +25,10 @@ public class CellSurvivalPanel extends JPanel
   private int numGreen;
   private int numBlue;
   private int turnNum;
+  private boolean choice;
+  private static int numStartOrganisms;
+  private static int numStartFood;
+    
   
   public CellSurvivalPanel()
       {
@@ -43,17 +47,58 @@ public class CellSurvivalPanel extends JPanel
          numGreen = 0;
          numBlue = 0;
          turnNum = 0;
+         numStartOrganisms = 4;
+         numStartFood = 8;
+         choice = true;//if true choose organisms if false choose food in start menu
          addMouseListener(new Mouse());
+         addKeyListener(new Key());
+         setFocusable(false);
          
          //************************************************
          // THIS IS THE SECTION THAT SETS EVERYTHING UP
          //************************************************
-          /**********************************
+          
+               
+      }
+      //**************************************************
+      // The mouse adapter is what recognizes where the 
+      // mouse is being clicked
+      //**************************************************
+      private class Mouse extends MouseAdapter
+      {
+        public void mousePressed( MouseEvent e )
+        {
+          if(e.isMetaDown() == false)//checks if left click
+          {
+            
+            if(e.getX() < 90 && e.getY() <50)
+              screen = 0;
+            else if(e.getX() < 190 && e.getY() <50)
+              screen = 1;
+            else if(e.getX() < 290 && e.getY() <50)
+              screen = 2;
+            System.out.println("X: "+e.getX()+" Y: "+e.getY());
+          } 
+        }
+      }
+      //******************************************************
+      // The key listener gets input from the keyboard
+      //
+      //******************************************************
+      private class Key extends KeyAdapter
+      {
+        public void keyPressed(KeyEvent e)
+        {
+          if(e.getKeyCode() == KeyEvent.VK_X)//QUICK START
+          {
+            numStartOrganisms = 4;
+            numStartFood = 8;
+            /**********************************
              *  creates new food
              ***********************************/
-              for(int i = 0; i < 8; i++)
+              for(int i = 0; i < numStartFood; i++)
              {
-                Food food = new Food(Math.random()*1500,Math.random()*1460+20,20,1000);
+                Food food = new Food(Math.random()*1500,Math.random()*1460+20,20,500);
                 foodList.add(food);
                 numFood++;
               }
@@ -61,7 +106,7 @@ public class CellSurvivalPanel extends JPanel
              /**********************************
              *  creates new Organism
              ***********************************/
-             for(int i = 0; i < 4; i++)
+             for(int i = 0; i < numStartOrganisms; i++)
              {
                int tendancies[] = new int[15];
                for(int j = 0; j < 15; j++)
@@ -85,30 +130,82 @@ public class CellSurvivalPanel extends JPanel
                    numBlue++;
                  }
              }
-               
-      }
-      //**************************************************
-      // The mouse adapter is what recognizes where the 
-      // mouse is being clicked
-      //**************************************************
-      private class Mouse extends MouseAdapter
-      {
-        public void mousePressed( MouseEvent e )
-        {
-          if(e.isMetaDown() == false)//checks if left click
+            screen = 0;
+          }
+          if(choice == true)//Num organisms
           {
-            
-            if(e.getX() < 90 && e.getY() <50)
-              screen = 0;
-            else if(e.getX() < 190 && e.getY() <50)
-              screen = 1;
-            else if(e.getX() < 290 && e.getY() <50)
-              screen = 2;
-            System.out.println("X: "+e.getX()+" Y: "+e.getY());
-          } 
-          
+            if(e.getKeyCode() == KeyEvent.VK_DOWN)
+            {
+              choice = false;
+            }
+            else if(e.getKeyCode() == KeyEvent.VK_RIGHT)
+            {
+              numStartOrganisms++;
+            }
+            else if(e.getKeyCode() == KeyEvent.VK_LEFT)
+            {
+              numStartOrganisms--;
+            }
+          }
+          else //start number of food
+          {
+            if(e.getKeyCode() == KeyEvent.VK_UP)
+            {
+              choice = true;
+            }
+            else if(e.getKeyCode() == KeyEvent.VK_RIGHT)
+            {
+              numStartFood++;
+            }
+            else if(e.getKeyCode() == KeyEvent.VK_LEFT)
+            {
+              numStartFood--;
+            }
+          }
+          if(e.getKeyCode() == KeyEvent.VK_ENTER)
+          {
+            /**********************************
+             *  creates new food
+             ***********************************/
+              for(int i = 0; i < numStartFood; i++)
+             {
+                Food food = new Food(Math.random()*1500,Math.random()*1460+20,20,500);
+                foodList.add(food);
+                numFood++;
+              }
+             
+             /**********************************
+             *  creates new Organism
+             ***********************************/
+             for(int i = 0; i < numStartOrganisms; i++)
+             {
+               int tendancies[] = new int[15];
+               for(int j = 0; j < 15; j++)
+               {
+                 tendancies[j] = 100;
+               }
+               
+               Organism organism = new Organism(Math.random()*1500,Math.random()*1500,30.0,10000,Color.BLUE,tendancies);
+               organismList.add(organism);
+               numCells++;
+               if(organism.getGrowthInclination() >= organism.getMaternalInclination()&&organism.getGrowthInclination() >= organism.getActive())
+                 { //RED
+                   numRed++;
+                 }
+                 else if(organism.getMaternalInclination() >= organism.getActive() &&organism.getMaternalInclination() >= organism.getGrowthInclination())
+                 {//BLUE
+                   numGreen++;
+                 }
+                 else if(organism.getActive() >= organism.getMaternalInclination() &&organism.getActive() >= organism.getGrowthInclination())
+                 {//GREEN
+                   numBlue++;
+                 }
+             }
+            screen = 0;
+          }
         }
       }
+      
       //**************************************************
       //  the action listener is the section where things
       //  get drawn to the screen.  i.e. every thime the
@@ -215,7 +312,7 @@ public class CellSurvivalPanel extends JPanel
                  greenPop.add(numGreen);
                  bluePop.add(numBlue);
                }
-               if(turnNum %350 == 0)//Adds food to board
+               if(turnNum %400 == 0)//Adds food to board
                {
                 Food food = new Food(Math.random()*1500,Math.random()*1460+20,20,1000);
                 foodList.add(food);
@@ -274,11 +371,11 @@ public class CellSurvivalPanel extends JPanel
              }
              buffer.setColor(Color.BLACK);
              buffer.setFont(new Font("Dialog",Font.BOLD, 40));
-             buffer.drawString("Current Cell Population: " + numCells, 100, 1100);
+             buffer.drawString("Current Cell Population (BLACK): " + numCells, 100, 1100);
              buffer.drawString("Current # of Food: " + numFood, 100, 1150);
-             buffer.drawString("# of cells with curiosity as a primary trait: " + numRed, 100, 1200);
-             buffer.drawString("# of cells with temperament as a primary trait:  " + numBlue, 100, 1250);
-             buffer.drawString("# of cells with Active as a primary trait:  " + numGreen, 100, 1300);
+             buffer.drawString("# of cells with curiosity (RED) as a primary trait: " + numRed, 100, 1200);
+             buffer.drawString("# of cells with Active (BLUE) as a primary trait:  " + numBlue, 100, 1250);
+             buffer.drawString("# of cells with Temperament (GREEN) as a primary trait:  " + numGreen, 100, 1300);
              break;
              case 2://about
                buffer.setColor(Color.BLACK);
@@ -303,6 +400,22 @@ public class CellSurvivalPanel extends JPanel
                buffer.drawString("How often should it split? As the simulation goes on, watch as", 170, 800);
                buffer.drawString("survival of the fittest takes place right before your eyes!", 170, 850);
                break;
+               
+               
+             case 4://START SCREEN
+               buffer.setColor(Color.WHITE);
+               buffer.fillRect(0,0,N,N);
+               buffer.setColor(Color.BLACK);
+               buffer.setFont(new Font("Helvetica",Font.PLAIN, 40));
+               buffer.drawString("Press \"x\" for the quick start simulation",170,150);
+               buffer.drawString("How many organisms would you like to start the simulation with?  "+numStartOrganisms,170,200);
+               buffer.drawString("How much food would you like to start the simulation with?  "+numStartFood,170,250);
+               buffer.drawString("Press the left and right arrow key to choose how many",170,350);
+               buffer.drawString("And then press up and down arrow keys to switch between the choices",170,400);
+               buffer.drawString("When you are satisfied, press the enter key to start the simulation",170,500);
+               
+                 
+              break; 
            }
            
            //THIS IS CREATING THE TAB LABLES  

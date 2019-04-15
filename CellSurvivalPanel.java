@@ -52,7 +52,7 @@ public class CellSurvivalPanel extends JPanel
          choice = true;//if true choose organisms if false choose food in start menu
          addMouseListener(new Mouse());
          addKeyListener(new Key());
-         setFocusable(false);
+         setFocusable(true);
          
          //************************************************
          // THIS IS THE SECTION THAT SETS EVERYTHING UP

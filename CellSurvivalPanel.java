@@ -469,18 +469,96 @@ public class CellSurvivalPanel extends JPanel
           
           
         case 4://START SCREEN
-          buffer.setColor(Color.WHITE);
-          buffer.fillRect(0,0,N,N);
-          buffer.setColor(Color.BLACK);
-          buffer.setFont(new Font("Helvetica",Font.PLAIN, 40));
-          buffer.drawString("Press \"x\" for the quick start simulation",170,150);
-          buffer.drawString("How many organisms would you like to start the simulation with?  "+numStartOrganisms,170,200);
-          buffer.drawString("How much food would you like to start the simulation with?  "+numStartFood,170,250);
-          buffer.drawString("Press the left and right arrow key to choose how many",170,350);
-          buffer.drawString("And then press up and down arrow keys to switch between the choices",170,400);
-          buffer.drawString("When you are satisfied, press the enter key to start the simulation",170,500);
-          
-          
+                 buffer.setColor(Color.BLACK);
+                 buffer.fillRect(0,0,N,N);
+                 
+       		     intx = 190;
+     		     inty = 650;
+     		     diam = 50;
+     		     int sx[] = new int [3];
+     		     int sy[] = new int [3];
+     		     //border for right triangle
+     		     buffer.setColor(Color.GRAY);
+     		     sx[0] = intx + (int)diam/2 ; sx[1] = sx[0] + 45; sx[2] = sx[0] + 45;
+     		     sy[0] = inty + 15; sy[1] = sy[0] + 45; sy[2] = sy[0] - 45;
+     	         buffer.fillPolygon(new Polygon(sx, sy, 3));	
+              	//right triangle
+     		     buffer.setColor(Color.MAGENTA);
+     		     sx[0] = intx + (int)diam/2 +8; sx[1] = sx[0] + 30; sx[2] = sx[0] + 30;
+     		     sy[0] = inty + 15; sy[1] = sy[0] + 30; sy[2] = sy[0] - 30;
+     	         buffer.fillPolygon(new Polygon(sx, sy, 3));
+     	         //border for left triangle
+     		     buffer.setColor(Color.GRAY);
+     		     sx[0] = intx + (int)diam/2 ; sx[1] = sx[0] - 45; sx[2] = sx[0] - 45;
+     		     sy[0] = inty + 15; sy[1] = sy[0] + 45; sy[2] = sy[0] - 45;
+     	         buffer.fillPolygon(new Polygon(sx, sy, 3));	
+     	         //left triangle
+     		     buffer.setColor(Color.MAGENTA);
+	     		 sx[0] = intx + (int)diam/2 -8; sx[1] = sx[0] - 30; sx[2] = sx[0] - 30;
+	     		 sy[0] = inty + 15; sy[1] = sy[0] + 30; sy[2] = sy[0] - 30;
+	     	     buffer.fillPolygon(new Polygon(sx, sy, 3));
+	     	     //circle
+	     	     buffer.setColor(Color.GRAY);
+	     	     buffer.fillOval(intx,inty,diam, diam);
+	     		 buffer.setColor(Color.WHITE);
+	     	     buffer.fillOval(intx+4, inty+4, diam-8, diam-8);
+	     	     
+       		     intx = 190;
+     		     inty = 850;
+     		     diam = 50;
+     		     //border for right triangle
+     		     buffer.setColor(Color.GRAY);
+     		     sx[0] = intx + (int)diam/2 ; sx[1] = sx[0] + 45; sx[2] = sx[0] + 45;
+     		     sy[0] = inty + 15; sy[1] = sy[0] + 45; sy[2] = sy[0] - 45;
+     	         buffer.fillPolygon(new Polygon(sx, sy, 3));	
+              	//right triangle
+     		     buffer.setColor(Color.MAGENTA);
+     		     sx[0] = intx + (int)diam/2 +8; sx[1] = sx[0] + 30; sx[2] = sx[0] + 30;
+     		     sy[0] = inty + 15; sy[1] = sy[0] + 30; sy[2] = sy[0] - 30;
+     	         buffer.fillPolygon(new Polygon(sx, sy, 3));
+     	         //border for left triangle
+     		     buffer.setColor(Color.GRAY);
+     		     sx[0] = intx + (int)diam/2 ; sx[1] = sx[0] - 45; sx[2] = sx[0] - 45;
+     		     sy[0] = inty + 15; sy[1] = sy[0] + 45; sy[2] = sy[0] - 45;
+     	         buffer.fillPolygon(new Polygon(sx, sy, 3));	
+     	         //left triangle
+     		     buffer.setColor(Color.MAGENTA);
+	     		 sx[0] = intx + (int)diam/2 -8; sx[1] = sx[0] - 30; sx[2] = sx[0] - 30;
+	     		 sy[0] = inty + 15; sy[1] = sy[0] + 30; sy[2] = sy[0] - 30;
+	     	     buffer.fillPolygon(new Polygon(sx, sy, 3));
+	     	     //circle
+	     	     buffer.setColor(Color.GRAY);
+	     	     buffer.fillOval(intx,inty,diam, diam);
+	     		 buffer.setColor(Color.WHITE);
+	     	     buffer.fillOval(intx+4, inty+4, diam-8, diam-8);
+	   	    
+            	 
+                 buffer.setColor(Color.DARK_GRAY);
+                 buffer.fillRect(170,393,1050,150);
+                 buffer.setColor(Color.WHITE);
+                 buffer.setFont(new Font("Helvetica",Font.PLAIN, 60));
+                 buffer.drawString("Welcome to...", 170, 365);
+                 buffer.setFont(new Font("Helvetica",Font.BOLD, 130));
+                 Color c = new Color((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255));
+                 buffer.setColor(c);
+                 buffer.drawString("CELL SURVIVAL", 170, 520);
+               
+                 buffer.setColor(Color.WHITE);
+	             buffer.setFont(new Font("MONOSPACED",Font.PLAIN, 60));
+	             buffer.drawString("QUICK START SIMULATION",280,690);  
+	             buffer.drawString("CUSTOMIZED SIMULATION",280,890);           
+	               
+	             buffer.setFont(new Font("ARIAL",Font.PLAIN, 30));
+	             buffer.setColor(Color.LIGHT_GRAY); 
+	             buffer.drawString("Press LEFT and RIGHT arrow keys to choose a number",170,970);
+	             buffer.drawString("Press UP and DOWN arrow keys to switch between the choices",170,1010);
+	             buffer.drawString("Press \"ENTER\" to start simulation",170,1050);
+	
+	             buffer.setFont(new Font("MONOSPACED",Font.PLAIN, 50));
+	             buffer.setColor(Color.YELLOW); 
+	             buffer.drawString("PRESS \"X\"",300,790);
+	             buffer.drawString("# OF ORGANISMS:  "+numStartOrganisms,300,1140);
+	             buffer.drawString("# OF FOOD:  "+numStartFood,300,1240);        
           break; 
       }
       

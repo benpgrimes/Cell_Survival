@@ -472,9 +472,9 @@ public class CellSurvivalPanel extends JPanel
                  buffer.setColor(Color.BLACK);
                  buffer.fillRect(0,0,N,N);
                  
-       		     intx = 190;
-     		     inty = 650;
-     		     diam = 50;
+       		     int intx = 190;
+     		     int inty = 650;
+     		     int diam = 50;
      		     int sx[] = new int [3];
      		     int sy[] = new int [3];
      		     //border for right triangle

@@ -68,7 +68,7 @@ public class CellSurvivalPanel extends JPanel
   {
     public void mousePressed( MouseEvent e )
     {
-      if(e.isMetaDown() == false)//checks if left click
+      if(e.isMetaDown() == false && screen != 4)//checks if left click
       {
         if(e.getX() < 90 && e.getY() <50)
           screen = 0;
@@ -565,30 +565,32 @@ public class CellSurvivalPanel extends JPanel
           break; 
           
       }
-      
-      //THIS IS CREATING THE TAB LABLES  
-      buffer.setColor(Color.BLACK);
-      buffer.fillRect(0,0,300,50);
-      buffer.setColor(Color.WHITE);
-      buffer.fillRect(5,5,290,42);
-      
-      buffer.setColor(Color.BLACK); 
-      buffer.setFont(new Font("Monospaced", Font.BOLD, 24));
-      buffer.drawString("BOARD  ",20,35); //added 20 from previous           
-      buffer.fillRect(97, 5, 5,45);
-      
-      buffer.setColor(Color.BLACK); 
-      buffer.setFont(new Font("Monospaced", Font.BOLD, 24));
-      buffer.drawString("GRAPH  ",110,35);
-      buffer.fillRect(197, 5, 5,45);
-      
-      buffer.setColor(Color.BLACK);
-      buffer.setFont(new Font("Monospaced", Font.BOLD, 24));
-      buffer.drawString("ABOUT  ",210,35);
-      
+      if(screen != 4)
+      {
+        //THIS IS CREATING THE TAB LABLES  
+        buffer.setColor(Color.BLACK);
+        buffer.fillRect(0,0,300,50);
+        buffer.setColor(Color.WHITE);
+        buffer.fillRect(5,5,290,42);
+        
+        buffer.setColor(Color.BLACK); 
+        buffer.setFont(new Font("Monospaced", Font.BOLD, 24));
+        buffer.drawString("BOARD  ",20,35); //added 20 from previous           
+        buffer.fillRect(97, 5, 5,45);
+        
+        buffer.setColor(Color.BLACK); 
+        buffer.setFont(new Font("Monospaced", Font.BOLD, 24));
+        buffer.drawString("GRAPH  ",110,35);
+        buffer.fillRect(197, 5, 5,45);
+        
+        buffer.setColor(Color.BLACK);
+        buffer.setFont(new Font("Monospaced", Font.BOLD, 24));
+        buffer.drawString("ABOUT  ",210,35);
+      }
       repaint();
     }
   }
+
   
   public void paintComponent(Graphics g)
   {

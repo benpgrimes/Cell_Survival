@@ -563,7 +563,7 @@ public class CellSurvivalPanel extends JPanel
           buffer.setColor(Color.YELLOW); 
           buffer.drawString("PRESS \"X\"",300,790);
           buffer.drawString("# OF ORGANISMS:  "+numStartOrganisms,300,1140);
-          buffer.drawString("# OF FOOD:  "+numStartFood,300,1240);        
+          buffer.drawString("# OF FOOD:  "+numRecurringFood,300,1240);        
           break; 
           
       case 5://pause the screen

@@ -409,8 +409,10 @@ public class CellSurvivalPanel extends JPanel
           buffer.setFont(new Font("Helvetica",Font.ITALIC, 30));            
           buffer.drawString("Note: This software is provided AS IS and is not subject to warranty. This software is", 170, 1060);
           buffer.drawString("run at the discretion of the user and is not responsible for any potential misuse.", 170, 1090);
-          buffer.drawString("© 2019", 170, 1120);
-          
+          buffer.setFont(new Font("Helvetica",Font.PLAIN, 30)); 
+          buffer.drawString("Implemented using Java 1.8", 170, 1150);
+          buffer.drawString("© 2019", 170, 1180);
+
           //graphics # 1
           int intx = 110;
           int inty = 160;

@@ -566,7 +566,7 @@ public class CellSurvivalPanel extends JPanel
           buffer.drawString("# OF FOOD:  "+numStartFood,300,1240);        
           break; 
           
-      case5://pause the screen
+      case 5://pause the screen
           break;
           
       }

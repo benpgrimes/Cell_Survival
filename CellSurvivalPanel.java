@@ -147,7 +147,9 @@ public class CellSurvivalPanel extends JPanel
         }
         else if(e.getKeyCode() == KeyEvent.VK_LEFT)
         {
-          numStartOrganisms--;
+          if (numStartOrganisms > 0){
+        	  numStartOrganisms--;
+          }
         }
       }
       else //start number of food
@@ -162,7 +164,9 @@ public class CellSurvivalPanel extends JPanel
         }
         else if(e.getKeyCode() == KeyEvent.VK_LEFT)
         {
-          numRecurringFood--;
+          if (numRecurringFood > 0){
+        	  numRecurringFood--;
+          }
         }
       }
       if(e.getKeyCode() == KeyEvent.VK_ENTER)

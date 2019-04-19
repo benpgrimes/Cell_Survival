@@ -345,26 +345,52 @@ public class Organism extends Cell {
   *
   *
   *********************************************/
- public void examine(LinkedList Organisms, LinkedList foodList, int numOrganisms, int numFood) {
-   int mindist = 0x7fffffff;
-   int index1 = -1;
-   int index2 = -1;
-   
-   for(int i = 0; i < 3; i++) {
-     Cell closeFood = null;
-     for (int j = 0; j < numFood; j++) {
-       if(j != index1 && j != index2) {
-         Cell tempFood = (Cell) foodList.get(j);
-         int tempx = (int) (tempFood.x - this.x);// these were also made ints
-         int tempy = (int) (tempFood.y - this.y);// ''
-         int tempdist = (int) Math.sqrt((tempx * tempx) + (tempy * tempy));// ''
-         if (tempdist < mindist) {
-           mindist = tempdist;
-           closeFood = tempFood;
-           
-         }
-       }
-     }
+public void examine(LinkedList<Organism> organisms, LinkedList<Food> foodList, int numOrganisms, int numFood) {
+	    int mindist = 0x7fffffff;
+	    int index1 = -1;
+	    int index2 = -1;
+	    for(int i = 0; i < 3; i++) {
+	    	Cell closeFood = null;
+	    	Iterator<Food> foodCtr = foodList.iterator();
+		    for (int j = 0; j < numFood; j++) {
+				if(j != index1 && j != index2) {
+					Cell tempFood = foodCtr.next();
+					int tempx = (int) (tempFood.x - this.x);// these were also made ints
+					int tempy = (int) (tempFood.y - this.y);// ''
+					int tempdist = (int) Math.sqrt((tempx * tempx) + (tempy * tempy));// ''
+					if (tempdist < mindist) {
+					  mindist = tempdist;
+					  closeFood = tempFood;
+					}
+				}
+		    }
+		    
+	    	this.closestFood[i] = new Food(closeFood.getX(), closeFood.getY(), closeFood.getDiam(), closeFood.getEnergy());
+	    	mindist = 0x7fffffff;
+	    }
+	    for(int i = 0; i < 3; i++) {
+		    Cell closeOrganism = null;
+		    Iterator<Organism> organismCtr = organisms.iterator();
+			for (int j = 0; j < numOrganisms; j++) {
+			    if(j != index1 || j != index2) {
+					Cell tempOrganism = organismCtr.next();
+					int tempx = (int) (tempOrganism.x - this.x);// these were also made ints
+					int tempy = (int) (tempOrganism.y - this.y);// ''
+					int tempdist = (int) Math.sqrt((tempx * tempx) + (tempy * tempy));// ''
+					if (tempdist < mindist) {
+						mindist = tempdist;
+						closeOrganism = tempOrganism;
+						
+					}
+			    }
+			}
+		    this.closestOrganism[i] = new Organism(closeOrganism.getX(), closeOrganism.getY(), closeOrganism.getDiam(), 
+		    		closeOrganism.getEnergy(), closeOrganism.getColor(), closeOrganism.garbageTendencies());
+		    mindist = 0x7fffffff;
+	    }
+	    this.prevdirection = -1;
+		reduceEnergy(2);		//CHECK
+	}
      
      this.closestFood[i] = new Food(closeFood.getX(), closeFood.getY(), closeFood.getDiam(), closeFood.getEnergy());
      mindist = 0x7fffffff;

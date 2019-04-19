@@ -26,6 +26,7 @@ public class CellSurvivalPanel extends JPanel
   private int numGreen;
   private int numBlue;
   private int turnNum;
+  private int count = 0;
   private boolean choice;
   private static int numStartOrganisms;
   private static int numRecurringFood;
@@ -76,10 +77,6 @@ public class CellSurvivalPanel extends JPanel
           screen = 1;
         else if(e.getX() < 290 && e.getY() <50)
           screen = 2;
-        else if(e.getX() < 1350 && e.getX() > 1250 && e.getY() <1450 && e.getY() > 810)
-          screen = 5;
-        else if(e.getX() > 1350 && e.getY() <1450 && e.getY() > 810)
-          screen = 0;
         System.out.println("X: "+e.getX()+" Y: "+e.getY());
       } 
     }
@@ -210,6 +207,21 @@ public class CellSurvivalPanel extends JPanel
         }
         screen = 0;
       }
+    if(e.getKeyCode() == KeyEvent.VK_SPACE){
+        count++;
+	}
+    if(count % 2 == 0){
+    	screen = 0;
+        }
+    else{
+        screen = 5;
+	buffer.setColor(Color.BLACK);
+        buffer.fillRect(590, 190, 120, 1020);
+	buffer.fillRect(840, 190, 120, 1020);
+        buffer.setColor(Color.GREEN);
+	buffer.fillRect(600, 200, 100, 1000);
+        buffer.fillRect(850, 200, 100, 1000);
+        }
     }
   }
   
@@ -639,13 +651,6 @@ public class CellSurvivalPanel extends JPanel
         buffer.setColor(Color.BLACK);
         buffer.setFont(new Font("Monospaced", Font.BOLD, 24));
         buffer.drawString("ABOUT  ",210,35);
-        
-        buffer.setColor(Color.PINK);
-        buffer.setFont(new Font("Monospaced", Font.BOLD, 24));
-        buffer.drawString("pause  ",1300,1450);
-        buffer.setColor(Color.GREEN);
-        buffer.setFont(new Font("Monospaced", Font.BOLD, 24));
-        buffer.drawString("resume  ",1400,1450);
       }
       repaint();
     }

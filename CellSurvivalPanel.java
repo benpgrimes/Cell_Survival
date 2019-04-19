@@ -4,6 +4,7 @@ import java.awt.event.*;
 import java.awt.image.*;
 import java.util.LinkedList;
 import java.util.ArrayList;
+import java.util.ListIterator;
 
 public class CellSurvivalPanel extends JPanel
 {

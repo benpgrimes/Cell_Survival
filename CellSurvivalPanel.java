@@ -219,22 +219,24 @@ public class CellSurvivalPanel extends JPanel
     {
        switch(screen)
       {
-        case 0://board
+         case 0://board
           
           //draws background
           buffer.setColor(Color.WHITE);
           buffer.fillRect(0,0,N,N);
           
+		  ListIterator<Food> foodCtr = foodList.listIterator();
+		  ListIterator<Organism> organismCtr = organismList.listIterator();
           //Iterates through food list
-          for(int i = 0; i < numFood; i++)
+          while(foodCtr.hasNext())
           {
-            foodList.get(i).draw(buffer);
+            foodCtr.next().draw(buffer);
           }
           
           //Iterates through Organism list
-          for(int i = 0; i < numCells; i++)
+          while(organismCtr.hasNext())
           {
-            Organism tempOrg = organismList.get(i);
+            Organism tempOrg = organismCtr.next();
             tempOrg.move();
             int temp = tempOrg.choose();
             if(temp == 1)
@@ -259,8 +261,8 @@ public class CellSurvivalPanel extends JPanel
               else if(child.getActive() >= child.getMaternalInclination() &&child.getActive() >= child.getGrowthInclination())
               {//GREEN
                 numBlue++;
-              }
-              organismList.add(child);
+              }            
+              organismCtr.add(child);
               numCells++;
             }
             else if(temp == 4)
@@ -269,13 +271,14 @@ public class CellSurvivalPanel extends JPanel
               tempOrg.idle();
             
             //Checks for collision
-              for(int j = 0; j < numFood; j++)
+              foodCtr = foodList.listIterator();
+              while(foodCtr.hasNext())
               {
-                if(tempOrg.collision(foodList.get(j).getX(),foodList.get(j).getY(),
-                                     foodList.get(j).getEnergy()))
+            	Food tempfood = foodCtr.next();
+                if(tempOrg.collision(tempfood.getX(),tempfood.getY(),
+                                     tempfood.getEnergy()))
                 {
-                  foodList.remove(j);
-                  j--;
+                  foodCtr.remove();
                   numFood--;
                   //foodList.get(j).setX(Math.random()*1500);
                   //foodList.get(j).setY(Math.random()*1460+20);
@@ -297,13 +300,12 @@ public class CellSurvivalPanel extends JPanel
               {//GREEN
                 numBlue--;
               }
-              Food food = new Food(tempOrg.getX(),tempOrg.getY(),tempOrg.getDiam(),(int)tempOrg.getDiam());
-              foodList.add(food);
+              Food food = new Food(tempOrg.getX(),tempOrg.getY(),20,(int)tempOrg.getDiam());
+              foodCtr.add(food);
               numFood++;
-              organismList.remove(i);
-              i--;
+              organismCtr.remove();
               numCells--;
-            }
+            } 
           } 
           if(turnNum %100 == 0)//Adds to graph 
             {
@@ -316,7 +318,7 @@ public class CellSurvivalPanel extends JPanel
           {
         	for(int i = 0; i < CellSurvivalPanel.numRecurringFood; i++) {
 	            Food food = new Food(Math.random()*1500,Math.random()*1460+20,20,500);
-	            foodList.add(food);
+	            foodCtr.add(food);
 	            numFood++;
         	}
           }     
@@ -345,27 +347,67 @@ public class CellSurvivalPanel extends JPanel
           
           
           buffer.setColor(Color.BLACK);
-          for(int i = 0; i < population.size()-1;i++)//TOTAL POPULATION
+          ListIterator<Integer> populationCtr = population.listIterator();
+          Integer tempInt1 = 0;
+          Integer tempInt2 = 0;
+          if(populationCtr.hasNext()) {
+        	  tempInt1 = populationCtr.next();
+          }if(populationCtr.hasNext()) {
+        	  tempInt2 = populationCtr.next();
+          }
+         for(int i = 2; i < population.size()-1; i++)//TOTAL POPULATION
           {
-            buffer.drawLine(100+i*10,1000-population.get(i)*11,100+(i+1)*10,1000-population.get(i+1)*11);
+            buffer.drawLine(100+i*10,1000-tempInt1*11,100+(i+1)*10,1000-tempInt2*11);
+            tempInt1 = tempInt2;
+            tempInt2 = populationCtr.next();
           }
           
           buffer.setColor(Color.RED);//RED POPULATION
-          for(int i = 0; i < redPop.size()-1;i++)
+          populationCtr = redPop.listIterator();
+          tempInt1 = 0;
+          tempInt2 = 0;
+          if(populationCtr.hasNext()) {
+        	  tempInt1 = populationCtr.next();
+          }if(populationCtr.hasNext()) {
+        	  tempInt2 = populationCtr.next();
+          }
+         for(int i = 2; i < redPop.size()-1; i++)//TOTAL POPULATION
           {
-            buffer.drawLine(100+i*10,1000-redPop.get(i)*11,100+(i+1)*10,1000-redPop.get(i+1)*11);
+            buffer.drawLine(100+i*10,1000-tempInt1*11,100+(i+1)*10,1000-tempInt2*11);
+            tempInt1 = tempInt2;
+            tempInt2 = populationCtr.next();
           }
           
+         
           buffer.setColor(Color.BLUE);//BLUE POPULATION
-          for(int i = 0; i < bluePop.size()-1;i++)
-          {
-            buffer.drawLine(100+i*10,1000-bluePop.get(i)*11,100+(i+1)*10,1000-bluePop.get(i+1)*11);
+          populationCtr = bluePop.listIterator();
+          tempInt1 = 0;
+          tempInt2 = 0;
+          if(populationCtr.hasNext()) {
+        	  tempInt1 = populationCtr.next();
+          }if(populationCtr.hasNext()) {
+        	  tempInt2 = populationCtr.next();
           }
-          
-          buffer.setColor(Color.GREEN);//GREEN POPULATION
-          for(int i = 0; i < greenPop.size()-1;i++)
+         for(int i = 2; i < bluePop.size()-1; i++)//TOTAL POPULATION
           {
-            buffer.drawLine(100+i*10,1000-greenPop.get(i)*11,100+(i+1)*10,1000-greenPop.get(i+1)*11);
+            buffer.drawLine(100+i*10,1000-tempInt1*11,100+(i+1)*10,1000-tempInt2*11);
+            tempInt1 = tempInt2;
+            tempInt2 = populationCtr.next();
+          }
+          buffer.setColor(Color.GREEN);//GREEN POPULATION
+          populationCtr = greenPop.listIterator();
+          tempInt1 = 0;
+          tempInt2 = 0;
+          if(populationCtr.hasNext()) {
+        	  tempInt1 = populationCtr.next();
+          }if(populationCtr.hasNext()) {
+        	  tempInt2 = populationCtr.next();
+          }
+         for(int i = 2; i < greenPop.size()-1; i++)//TOTAL POPULATION
+          {
+            buffer.drawLine(100+i*10,1000-tempInt1*11,100+(i+1)*10,1000-tempInt2*11);
+            tempInt1 = tempInt2;
+            tempInt2 = populationCtr.next();
           }
           buffer.setColor(Color.BLACK);
           buffer.setFont(new Font("Dialog",Font.BOLD, 40));
@@ -376,11 +418,9 @@ public class CellSurvivalPanel extends JPanel
           buffer.drawString("# of cells with Temperament (GREEN) as a primary trait:  " + numGreen, 100, 1300);
           
           buffer.setColor(Color.WHITE);
-	  buffer.fillRect(0,20,1500,82);
           buffer.fillRect(1407,0,200,1450);
           break;
-          
-          
+      
         case 2://about
           buffer.setColor(Color.BLACK);
           buffer.fillRect(0,0,N,N);

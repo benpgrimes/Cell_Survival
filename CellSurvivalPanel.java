@@ -376,6 +376,7 @@ public class CellSurvivalPanel extends JPanel
           buffer.drawString("# of cells with Temperament (GREEN) as a primary trait:  " + numGreen, 100, 1300);
           
           buffer.setColor(Color.WHITE);
+	  buffer.fillRect(0,20,1500,82);
           buffer.fillRect(1407,0,200,1450);
           break;
           

@@ -27,8 +27,7 @@ public class CellSurvivalPanel extends JPanel
   private int turnNum;
   private boolean choice;
   private static int numStartOrganisms;
-  private static int numStartFood;
-    
+  private static int numRecurringFood;
   
   public CellSurvivalPanel()
   {
@@ -47,8 +46,8 @@ public class CellSurvivalPanel extends JPanel
     numGreen = 0;
     numBlue = 0;
     turnNum = 0;
-    numStartOrganisms = 4;
-    numStartFood = 8;
+    numStartOrganisms = 10;
+    numRecurringFood = 5;
     choice = true;//if true choose organisms if false choose food in start menu
     addMouseListener(new Mouse());
     addKeyListener(new Key());
@@ -94,12 +93,12 @@ public class CellSurvivalPanel extends JPanel
     {
       if(e.getKeyCode() == KeyEvent.VK_X)//QUICK START
       {
-        numStartOrganisms = 4;
-        numStartFood = 8;
+        numStartOrganisms = 10;
+        numRecurringFood = 5;
         /**********************************
         *  creates new food
         ***********************************/
-        for(int i = 0; i < numStartFood; i++)
+        for(int i = 0; i < numRecurringFood; i++)
         {
           Food food = new Food(Math.random()*1500,Math.random()*1460+20,20,500);
           foodList.add(food);
@@ -158,11 +157,11 @@ public class CellSurvivalPanel extends JPanel
         }
         else if(e.getKeyCode() == KeyEvent.VK_RIGHT)
         {
-          numStartFood++;
+          numRecurringFood++;
         }
         else if(e.getKeyCode() == KeyEvent.VK_LEFT)
         {
-          numStartFood--;
+          numRecurringFood--;
         }
       }
       if(e.getKeyCode() == KeyEvent.VK_ENTER)
@@ -170,7 +169,7 @@ public class CellSurvivalPanel extends JPanel
         /**********************************
         *  creates new food
         ***********************************/
-        for(int i = 0; i < numStartFood; i++)
+        for(int i = 0; i < numRecurringFood; i++)
         {
           Food food = new Food(Math.random()*1500,Math.random()*1460+20,20,500);
           foodList.add(food);
@@ -218,7 +217,7 @@ public class CellSurvivalPanel extends JPanel
   {
     public void actionPerformed(ActionEvent e)
     {
-      switch(screen)
+       switch(screen)
       {
         case 0://board
           
@@ -270,8 +269,6 @@ public class CellSurvivalPanel extends JPanel
               tempOrg.idle();
             
             //Checks for collision
-            if(i>0)
-            {
               for(int j = 0; j < numFood; j++)
               {
                 if(tempOrg.collision(foodList.get(j).getX(),foodList.get(j).getY(),
@@ -285,7 +282,7 @@ public class CellSurvivalPanel extends JPanel
                 }
               }
               tempOrg.draw(buffer);
-            }
+   
             if(tempOrg.getEnergy() <= 0)//REMOVING DEAD CELLS
             {
               if(tempOrg.getGrowthInclination() >= tempOrg.getMaternalInclination()&&tempOrg.getGrowthInclination() >= tempOrg.getActive())
@@ -300,29 +297,30 @@ public class CellSurvivalPanel extends JPanel
               {//GREEN
                 numBlue--;
               }
-              Food food = new Food(tempOrg.getX(),tempOrg.getY(),20,500);
+              Food food = new Food(tempOrg.getX(),tempOrg.getY(),tempOrg.getDiam(),(int)tempOrg.getDiam());
               foodList.add(food);
               numFood++;
               organismList.remove(i);
               i--;
               numCells--;
             }
-            
-            if(turnNum %1000 == 0)//Adds to graph 
+          } 
+          if(turnNum %100 == 0)//Adds to graph 
             {
               population.add(numCells);
               redPop.add(numRed);
               greenPop.add(numGreen);
               bluePop.add(numBlue);
             }
-            if(turnNum %400 == 0)//Adds food to board
-            {
-              Food food = new Food(Math.random()*1500,Math.random()*1460+20,20,1000);
-              foodList.add(food);
-              numFood++;
-            }     
-            turnNum++;
-          }
+          if(turnNum %15 == 0)//Adds food to board
+          {
+        	for(int i = 0; i < CellSurvivalPanel.numRecurringFood; i++) {
+	            Food food = new Food(Math.random()*1500,Math.random()*1460+20,20,500);
+	            foodList.add(food);
+	            numFood++;
+        	}
+          }     
+          turnNum++;
           break;
         case 1://graph
           buffer.setColor(Color.WHITE);

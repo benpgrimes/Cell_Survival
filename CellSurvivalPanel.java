@@ -207,6 +207,18 @@ public class CellSurvivalPanel extends JPanel
         }
         screen = 0;
       }
+      if(e.getKeyCode() == KeyEvent.VK_SPACE && (screen == 0 || screen ==5))
+      {
+        count++;
+        if(count% 2 == 0)
+        {
+           screen = 0;
+        }
+        else
+        {
+          screen = 5;
+        }
+      }
     }
   }
   
@@ -612,7 +624,14 @@ public class CellSurvivalPanel extends JPanel
           break; 
           
       case 5://pause the screen
-          break;
+        buffer.setColor(Color.BLACK);
+        buffer.fillRect(590,190,120,1020);
+        buffer.fillRect(840, 190, 120, 1020);
+        buffer.setColor(Color.GREEN);
+        buffer.fillRect(600,200,100,1000);
+        buffer.fillRect(850, 200,100,1000);
+          
+        break;
           
       }
       if(screen != 4)

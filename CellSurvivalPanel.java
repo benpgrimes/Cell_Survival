@@ -145,7 +145,7 @@ public class CellSurvivalPanel extends JPanel
         else if(e.getKeyCode() == KeyEvent.VK_LEFT)
         {
           if (numStartOrganisms > 0){
-        	  numStartOrganisms--;
+           numStartOrganisms--;
           }
         }
       }
@@ -162,7 +162,7 @@ public class CellSurvivalPanel extends JPanel
         else if(e.getKeyCode() == KeyEvent.VK_LEFT)
         {
           if (numRecurringFood > 0){
-        	  numRecurringFood--;
+           numRecurringFood--;
           }
         }
       }
@@ -207,21 +207,6 @@ public class CellSurvivalPanel extends JPanel
         }
         screen = 0;
       }
-    if(e.getKeyCode() == KeyEvent.VK_SPACE){
-        count++;
-	}
-    if(count % 2 == 0){
-    	screen = 0;
-        }
-    else{
-        screen = 5;
-	buffer.setColor(Color.BLACK);
-        buffer.fillRect(590, 190, 120, 1020);
-	buffer.fillRect(840, 190, 120, 1020);
-        buffer.setColor(Color.GREEN);
-	buffer.fillRect(600, 200, 100, 1000);
-        buffer.fillRect(850, 200, 100, 1000);
-        }
     }
   }
   
@@ -242,8 +227,8 @@ public class CellSurvivalPanel extends JPanel
           buffer.setColor(Color.WHITE);
           buffer.fillRect(0,0,N,N);
           
-		  ListIterator<Food> foodCtr = foodList.listIterator();
-		  ListIterator<Organism> organismCtr = organismList.listIterator();
+    ListIterator<Food> foodCtr = foodList.listIterator();
+    ListIterator<Organism> organismCtr = organismList.listIterator();
           //Iterates through food list
           while(foodCtr.hasNext())
           {
@@ -291,7 +276,7 @@ public class CellSurvivalPanel extends JPanel
               foodCtr = foodList.listIterator();
               while(foodCtr.hasNext())
               {
-            	Food tempfood = foodCtr.next();
+             Food tempfood = foodCtr.next();
                 if(tempOrg.collision(tempfood.getX(),tempfood.getY(),
                                      tempfood.getEnergy()))
                 {
@@ -333,11 +318,11 @@ public class CellSurvivalPanel extends JPanel
             }
           if(turnNum %15 == 0)//Adds food to board
           {
-        	for(int i = 0; i < CellSurvivalPanel.numRecurringFood; i++) {
-	            Food food = new Food(Math.random()*1500,Math.random()*1460+20,20,500);
-	            foodCtr.add(food);
-	            numFood++;
-        	}
+         for(int i = 0; i < CellSurvivalPanel.numRecurringFood; i++) {
+             Food food = new Food(Math.random()*1500,Math.random()*1460+20,20,500);
+             foodCtr.add(food);
+             numFood++;
+         }
           }     
           turnNum++;
           break;
@@ -368,9 +353,9 @@ public class CellSurvivalPanel extends JPanel
           Integer tempInt1 = 0;
           Integer tempInt2 = 0;
           if(populationCtr.hasNext()) {
-        	  tempInt1 = populationCtr.next();
+           tempInt1 = populationCtr.next();
           }if(populationCtr.hasNext()) {
-        	  tempInt2 = populationCtr.next();
+           tempInt2 = populationCtr.next();
           }
          for(int i = 2; i < population.size()-1; i++)//TOTAL POPULATION
           {
@@ -384,9 +369,9 @@ public class CellSurvivalPanel extends JPanel
           tempInt1 = 0;
           tempInt2 = 0;
           if(populationCtr.hasNext()) {
-        	  tempInt1 = populationCtr.next();
+           tempInt1 = populationCtr.next();
           }if(populationCtr.hasNext()) {
-        	  tempInt2 = populationCtr.next();
+           tempInt2 = populationCtr.next();
           }
          for(int i = 2; i < redPop.size()-1; i++)//TOTAL POPULATION
           {
@@ -401,9 +386,9 @@ public class CellSurvivalPanel extends JPanel
           tempInt1 = 0;
           tempInt2 = 0;
           if(populationCtr.hasNext()) {
-        	  tempInt1 = populationCtr.next();
+           tempInt1 = populationCtr.next();
           }if(populationCtr.hasNext()) {
-        	  tempInt2 = populationCtr.next();
+           tempInt2 = populationCtr.next();
           }
          for(int i = 2; i < bluePop.size()-1; i++)//TOTAL POPULATION
           {
@@ -416,9 +401,9 @@ public class CellSurvivalPanel extends JPanel
           tempInt1 = 0;
           tempInt2 = 0;
           if(populationCtr.hasNext()) {
-        	  tempInt1 = populationCtr.next();
+           tempInt1 = populationCtr.next();
           }if(populationCtr.hasNext()) {
-        	  tempInt2 = populationCtr.next();
+           tempInt2 = populationCtr.next();
           }
          for(int i = 2; i < greenPop.size()-1; i++)//TOTAL POPULATION
           {

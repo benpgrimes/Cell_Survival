@@ -57,4 +57,10 @@ public abstract class Cell {
 	  return tendencies;
   }
   public abstract void draw(Graphics myBuffer);
+
+  public double getArea() {
+	double r = this.diam / 2;
+	double area = 3.14159*(r*r);
+	return area;
+  }
 }

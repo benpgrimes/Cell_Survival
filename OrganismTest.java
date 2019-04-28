@@ -1,6 +1,6 @@
 /** A JUnit Test class for testing the Organism class.
   * 
-  * @author David Tooley
+  * @author David Tooley, Zifeng Qi
   */
 import org.junit.*;
 import static org.junit.Assert.*;

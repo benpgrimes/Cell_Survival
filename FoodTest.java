@@ -31,7 +31,7 @@ public class FoodTest
   public void setX() 
   {
    foodTest.setX(0);
-   assertNotEquals(410,(int)foodTest.getX());
+   assertEquals(0,(int)foodTest.getX());
   }
   @Test
   public void getY() 
@@ -45,8 +45,8 @@ public class FoodTest
   {
     foodTest.setY(600);
     assertEquals(600,(int)foodTest.getY());
-    foodTest.setY(0);
-    assertNotEquals(600,(int)foodTest.getY());
+    foodTest.setY(10);
+    assertEquals(10,(int)foodTest.getY());
   }
   
   @Test
@@ -61,4 +61,3 @@ public class FoodTest
     System.out.println("Test done.");
    }
 }
-  
